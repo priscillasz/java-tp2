@@ -45,9 +45,7 @@ public class Pokemon {
         this.peso = peso;
     }
 
-    public float getAltura() {
-        return altura;
-    }
+    public float getAltura() { return altura; }
 
     public void setAltura(float altura) {
         this.altura = altura;
@@ -73,33 +71,68 @@ public class Pokemon {
 
     // capturar
     public void capturar(){
-
+        if (capturado)
+            System.out.println("O pokémon "+nome+" já foi capturado!");
+        else
+        {
+            if (chanceDeCaptura > 50){
+                capturado = true;
+                libertado = false;
+                System.out.println(nome+" foi capturado com sucesso!");
+            }
+            else
+            {
+                capturado = false;
+                libertado = true;
+                System.out.println("Oops! Você não conseguiu capturar "+nome+" :(");
+            }
+        }
     }
 
     // libertar
     public void libertar(){
-
+        if (libertado)
+            System.out.println("O pokémon já foi libertado!");
+        else
+        {
+            if (capturado){
+                libertado = true;
+                capturado = false;
+                System.out.println("Pokémon libertado com sucesso!");
+            }
+            else{ // acho que isso aqui é redundante mas ok
+                libertado = true;
+                System.out.println("O pokémon já está libertado.");
+            }
+        }
     }
 
     // brincar -> aumenta a felicidade em 50
     public void brincar(){
         felicidade += 50;
-        System.out.println("Felicidade subiu para "+felicidade+"!");
+        System.out.println("Você brincou com "+nome+" e sua felicidade subiu para "+felicidade+"!");
 
     }
     // alimentar -> aumenta a felicidade em 30
     public void alimentar(){
         felicidade += 30;
-        System.out.println("Felicidade subiu para "+felicidade+"!");
+        System.out.println("Você alimentou "+nome+" e sua felicidade subiu para "+felicidade+"!");
 
     }
     // falar
     public void falar(){
-        System.out.println(nome);
+        System.out.println(nome+"!!");
     }
 
     // evoluir
     public void evoluir(){
+        if (felicidade <= 100)
+            System.out.println("O pokémon não pode ser evoluído.");
+        else
+        {
+            felicidade -= 100;
+            System.out.println("Pokémon evoluído com sucesso!");
+        }
 
     }
 }

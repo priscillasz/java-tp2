@@ -25,10 +25,12 @@ public class Main {
         // criação do objeto pokemon da classe Pokemon
         Pokemon pokemon = new Pokemon(nome, tipo, peso, altura, felicidade, chanceCaptura);
 
+        // Pokemon poke2 = new Pokemon(pokemon.getNome(), pokemon.getTipo(), pokemon.getPeso(), pokemon.getAltura(), pokemon.getFelicidade(), pokemon.getChanceDeCaptura());
+
         // menu de ações
         int acao;
         do {
-            System.out.println("-----Ações do Pokémon-----");
+            System.out.println("-----Ações-----");
             System.out.println("(1) Capturar");
             System.out.println("(2) Libertar");
             System.out.println("(3) Brincar");
@@ -40,8 +42,10 @@ public class Main {
 
             switch(acao){
                 case 1: // capturar
+                    pokemon.capturar();
                     break;
                 case 2: // libertar
+                    pokemon.libertar();
                     break;
                 case 3: // brincar
                     pokemon.brincar();
