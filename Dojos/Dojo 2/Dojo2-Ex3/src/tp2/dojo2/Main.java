@@ -8,14 +8,15 @@ public class Main {
         // criação da instância scan da classe Scanner para leitura de valores
         Scanner scan = new Scanner(System.in);
 
-        // leitura dos atributos do pokémon
+        // leitura dos atributos do pokemon
+        System.out.println("Informações do Pokémon: ");
         System.out.println("Nome:");
         String nome = scan.nextLine();
         System.out.println("Tipo:");
         String tipo = scan.nextLine();
-        System.out.println("Peso:");
+        System.out.println("Peso (em kg):");
         float peso = scan.nextFloat();
-        System.out.println("Altura:");
+        System.out.println("Altura (em cm):");
         float altura = scan.nextFloat();
         System.out.println("Felicidade:");
         int felicidade = scan.nextInt();
@@ -23,14 +24,12 @@ public class Main {
         int chanceCaptura = scan.nextInt();
 
         // criação do objeto pokemon da classe Pokemon
-        Pokemon pokemon = new Pokemon(nome, tipo, peso, altura, felicidade, chanceCaptura);
-
-        // Pokemon poke2 = new Pokemon(pokemon.getNome(), pokemon.getTipo(), pokemon.getPeso(), pokemon.getAltura(), pokemon.getFelicidade(), pokemon.getChanceDeCaptura());
+       Pokemon pokemon = new Pokemon(nome, tipo, peso, altura, felicidade, chanceCaptura);
 
         // menu de ações
         int acao;
         do {
-            System.out.println("-----Ações-----");
+            System.out.println("\n-----Ações-----");
             System.out.println("(1) Capturar");
             System.out.println("(2) Libertar");
             System.out.println("(3) Brincar");
@@ -57,6 +56,12 @@ public class Main {
                     pokemon.falar();
                     break;
                 case 6: // evoluir
+                    scan.nextLine();
+                    System.out.println("Para qual Pokémon você quer que "+pokemon.getNome()+" evolua?");
+                    String pokeEvolucao = scan.nextLine();
+                    System.out.println("Qual é o tipo desse Pokémon?");
+                    String tipoEvolucao = scan.nextLine();
+                    pokemon.evoluir(pokeEvolucao, tipoEvolucao);
                     break;
             }
 

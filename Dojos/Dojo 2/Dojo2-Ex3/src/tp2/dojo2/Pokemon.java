@@ -10,7 +10,7 @@ public class Pokemon {
     private boolean capturado;
     private boolean libertado;
 
-    // construtor
+    // construtor com os atributos
     public Pokemon(String nome, String tipo, float peso, float altura, int felicidade, int chanceDeCaptura){
         this.nome = nome;
         this.tipo = tipo;
@@ -125,14 +125,26 @@ public class Pokemon {
     }
 
     // evoluir
-    public void evoluir(){
+    public void evoluir(String pokemonEvoluido, String tipoEvoluido){
         if (felicidade <= 100)
             System.out.println("O pokémon não pode ser evoluído.");
         else
         {
-            felicidade -= 100;
-            System.out.println("Pokémon evoluído com sucesso!");
-        }
+            felicidade -= 100; // felicidade diminui em 100
+            setNome(pokemonEvoluido); // nome e tipo mudam para o evoluído
+            setTipo(tipoEvoluido);
+            peso += peso; // escolhi aumentar peso e altura
+            altura += altura;
 
+            System.out.println("Pokémon evoluído com sucesso!");
+
+            // teste
+            System.out.println("Nome: "+getNome());
+            System.out.println("Tipo: "+getTipo());
+            System.out.println("Peso: "+getPeso());
+            System.out.println("Altura: "+getAltura());
+            System.out.println("Felicidade: "+getFelicidade());
+            System.out.println("Chance de captura: "+getChanceDeCaptura());
+        }
     }
 }
