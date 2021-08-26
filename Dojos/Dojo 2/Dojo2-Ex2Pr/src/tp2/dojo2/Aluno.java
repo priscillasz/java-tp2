@@ -4,14 +4,12 @@ public class Aluno {
     private int matricula;
     private String nome;
     private int idade;
-    // private static int qtdAlunos = 0;
 
     // construtor
     public Aluno(int matricula, String nome, int idade){
         this.matricula = matricula;
         this.nome = nome;
         this.idade = idade;
-        // qtdAlunos++;
     }
 
     // getters e setters | code > generate > getters e setters > seleciona tds os elementos

@@ -9,13 +9,13 @@ public class Main {
     // criação de vetor de alunos cadastrados
     static Aluno[] alunosCadastrados = new Aluno[MAX];
 
-    // listagem de alunos cadastrados
+    // (1) LISTAGEM DE ALUNOS CADASTRADOS
     public static void listaAluno(int qtdAlunos){
         for (int i = 0; i < qtdAlunos; i++)
             System.out.println(alunosCadastrados[i].getNome());
     }
 
-    // ADICIONAR ALUNO NOVO
+    // (2) ADICIONAR ALUNO NOVO
     public static void addAluno(int i){
         // nova instancia/objeto da classe Scanner
         Scanner scan = new Scanner(System.in);
@@ -30,7 +30,7 @@ public class Main {
         System.out.println("Aluno adicionado com sucesso!");
     }
 
-    // DELETAR ALUNO
+    // (3) DELETAR ALUNO
     public static void deletaAluno(int qtdAlunos){
         // nova instancia/objeto da classe Scanner
         Scanner scan = new Scanner(System.in);
@@ -60,7 +60,7 @@ public class Main {
             System.out.println("Aluno não encontrado.");
     }
 
-    // LEITURA DE ATRIBUTOS DE UM ALUNO ESPECÍFICO
+    // (4) LEITURA DE ATRIBUTOS DE UM ALUNO ESPECÍFICO
     public static void leAtributosAluno(int qtdAlunos){
         // nova instancia/objeto da classe Scanner
         Scanner scan = new Scanner(System.in);
@@ -83,7 +83,7 @@ public class Main {
             System.out.println("Aluno não encontrado.");
     }
 
-    // ALTERAR IDADE DE UM ALUNO ESPECÍFICO
+    // (5) ALTERAR IDADE DE UM ALUNO ESPECÍFICO
     public static void alteraIdade(int qtdAlunos){
         // nova instancia/objeto da classe Scanner
         Scanner scan = new Scanner(System.in);
@@ -105,8 +105,8 @@ public class Main {
         // nova instancia/objeto da classe Scanner
         Scanner scan = new Scanner(System.in);
 
-        int i = 0;
-        //int qtdAlunos = 0;
+        int i = 0; // contador de alunos adicionados
+
         // menu com as opções. o usuário pode escolher ações até que 0 seja digitado, então o programa para.
         int opcao;
         do {
