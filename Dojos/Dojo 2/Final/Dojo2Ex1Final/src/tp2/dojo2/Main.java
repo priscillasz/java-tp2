@@ -16,7 +16,7 @@ public class Main {
         mouse1.setCor(scann.nextLine());
         System.out.println("Qual a marca do mouse? ");
         mouse1.setMarca(scann.nextLine());
-        System.out.println("Seu mouse tem RGB? true ou false");
+        System.out.println("Seu mouse tem RGB? (true ou false)");
         mouse1.setRgb(scann.nextBoolean());
 
         // LIVRO
