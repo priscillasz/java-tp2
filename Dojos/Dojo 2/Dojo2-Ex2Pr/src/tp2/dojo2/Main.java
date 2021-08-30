@@ -31,15 +31,15 @@ public class Main {
     }
 
     // (3) DELETAR ALUNO
-    public static void deletaAluno(int qtdAlunos){
+    public static void deletaAluno(int qtdAlunos, boolean alunoExiste){
         // nova instancia/objeto da classe Scanner
         Scanner scan = new Scanner(System.in);
 
-        // lê a matrícula do aluno a ser deletado
+        // lê a matrícula do aluno a ser deltaletado
         System.out.println("Insira a matrícula do aluno a ser deletado:");
         int numMatricula = scan.nextInt();
 
-        boolean alunoExiste = false;
+        // boolean alunoExiste = false;
         int posicao = 0;
 
         // procura a posição da matrícula do aluno na array
@@ -88,24 +88,30 @@ public class Main {
         // nova instancia/objeto da classe Scanner
         Scanner scan = new Scanner(System.in);
 
+        boolean alunoExiste = false;
+
         System.out.println("Insira a matrícula do aluno a ter a idade alterada:");
         int numMatricula = scan.nextInt();
-
         for (int i = 0; i < qtdAlunos; i++){
             if (numMatricula == alunosCadastrados[i].getMatricula()){
+                alunoExiste = true;
                 System.out.println("Insira a nova idade:");
                 int novaIdade = scan.nextInt();
                 alunosCadastrados[i].setIdade(novaIdade);
                 System.out.println("Nova idade:"+alunosCadastrados[i].getIdade());
+                alunoExiste = true;
             }
         }
+        if (!alunoExiste){
+            System.out.println("Aluno não encontrado");
+        }
     }
-    
+
     public static void main(String[] args) {
         // nova instancia/objeto da classe Scanner
         Scanner scan = new Scanner(System.in);
 
-        int i = 0; // contador de alunos adicionados
+        int i = 0; // contador de qntdAlunos
 
         // menu com as opções. o usuário pode escolher ações até que 0 seja digitado, então o programa para.
         int opcao;
@@ -128,8 +134,10 @@ public class Main {
                     i++; // incrementa a quantidade de alunos qnd um novo é adicionado
                     break;
                 case 3: // deletar um aluno existente
-                    deletaAluno(i);
-                    i--; // decrementa a quantidade de alunos qnd um é deletado
+                    boolean alunoExiste = false;
+                    deletaAluno(i, alunoExiste);
+                    if (alunoExiste)
+                        i--; // decrementa a quantidade de alunos qnd um é deletado
                     break;
                 case 4: // ler os atributos de um aluno
                     leAtributosAluno(i);
@@ -138,6 +146,8 @@ public class Main {
                     alteraIdade(i);
                     break;
                 default:
+                    if (opcao != 0)
+                        System.out.println("Opção inválida");
                     break;
             }
         } while(opcao != 0);
