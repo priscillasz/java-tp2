@@ -4,15 +4,17 @@ import java.time.LocalDate;
 import java.util.Random;
 
 public class ContaCorrente extends Conta {
-    private double chequeEspecial;
+    private double chequeEspecial = 3000;
+    private double salario;
     private double saldo;
 
     public ContaCorrente(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
         super(nome, cpf, dataDeNascimento, email, telefone, senha);
-        // this.chequeEspecial = chequeEspecial;
+
     }
 
     public ContaCorrente() {
+
     }
 
     // getters e setters
@@ -106,15 +108,50 @@ public class ContaCorrente extends Conta {
         super.setConta(conta);
     }
 
+    //
+
+    public double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
     // métodos herdados
     @Override
     public void sacar(double valor) {
-
+        if (valor < saldo){
+            saldo -= valor;
+            System.out.println("Saque realizado com sucesso. Valor em conta: "+getSaldo());
+        }
+        else {
+            // double saldoRetirar = valor - (valor - saldo);
+            double sobra = valor - saldo;
+            if (chequeEspecial >= sobra){
+                chequeEspecial -= sobra;
+                saldo -= saldo;
+                System.out.println("Saque realizado com sucesso. Valor em conta: "+getSaldo()+" Valor restante do cheque especial: "+chequeEspecial);
+            }
+            else if (chequeEspecial < sobra) {
+                System.out.println("Operação inválida. Valor em conta não é suficiente e não há cheque especial disponível.");
+                System.out.println("Valor em conta: "+saldo+" Valor restante do cheque especial: "+chequeEspecial);
+            }
+        }
     }
 
     @Override
     public void depositar(double valor) {
-
+        saldo += valor;
+        System.out.println("Depósito realizado com sucesso. Valor em conta: "+saldo);
     }
 
     @Override

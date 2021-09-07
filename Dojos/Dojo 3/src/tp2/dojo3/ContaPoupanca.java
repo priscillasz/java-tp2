@@ -5,12 +5,14 @@ import java.util.Random;
 
 public class ContaPoupanca extends Conta {
 
+    private double saldo;
+    private double salario;
     public ContaPoupanca(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
         super(nome, cpf, dataDeNascimento, email, telefone, senha);
     }
 
     public ContaPoupanca(){
-
+        this.saldo = saldo + salario;
     }
 
     // getters e setters
@@ -104,15 +106,33 @@ public class ContaPoupanca extends Conta {
         super.setConta(conta);
     }
 
+    //
+    public double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+
     // metodos herdados
     @Override
     public void sacar(double valor) {
+        if (valor < saldo){
+            saldo -= valor;
+            System.out.println("Saque realizado com sucesso. Valor em conta: "+saldo);
+        }
+        else{
+            System.out.println("Operação inválida. Não há saldo suficiente em conta. Valor em conta: "+saldo);
 
+
+        }
     }
 
     @Override
     public void depositar(double valor) {
-
+        saldo += valor;
+        System.out.println("Depósito realizado com sucesso. Valor em conta: "+saldo);
     }
 
     @Override
