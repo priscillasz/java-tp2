@@ -12,12 +12,12 @@ public abstract class Conta {
     protected long cpf;
     protected LocalDate dataDeNascimento;
     protected String email;
-    protected int telefone;
+    protected long telefone;
     protected String senha;
     protected String agencia;
     protected int conta;
 
-    public Conta(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
+    public Conta(String nome, long cpf, LocalDate dataDeNascimento, String email, long telefone, String senha) {
         this.nome = nome;
         this.cpf = cpf;
         this.dataDeNascimento = dataDeNascimento;
@@ -45,7 +45,7 @@ public abstract class Conta {
 
     public long getCpf() { return cpf; }
 
-    public void setCpf(int cpf) { this.cpf = cpf; }
+    public void setCpf(long cpf) { this.cpf = cpf; }
 
     public LocalDate getDataDeNascimento() { return dataDeNascimento; }
 
@@ -55,9 +55,9 @@ public abstract class Conta {
 
     public void setEmail(String email) { this.email = email; }
 
-    public int getTelefone() { return telefone; }
+    public long getTelefone() { return telefone; }
 
-    public void setTelefone(int telefone) { this.telefone = telefone; }
+    public void setTelefone(long telefone) { this.telefone = telefone; }
 
     public String getSenha() { return senha; }
 

@@ -2,11 +2,12 @@ package tp2.dojo3;
 
 import java.time.LocalDate;
 import java.util.Random;
+import java.util.Scanner;
 
-public class ContaPoupanca extends Conta {
-
+public class ContaPoupanca extends Conta implements TransacaoEmConta{
     private double saldo;
     private double salario;
+
     public ContaPoupanca(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
         super(nome, cpf, dataDeNascimento, email, telefone, senha);
     }
@@ -42,7 +43,7 @@ public class ContaPoupanca extends Conta {
     }
 
     @Override
-    public void setCpf(int cpf) {
+    public void setCpf(long cpf) {
         super.setCpf(cpf);
     }
 
@@ -67,12 +68,12 @@ public class ContaPoupanca extends Conta {
     }
 
     @Override
-    public int getTelefone() {
+    public long getTelefone() {
         return super.getTelefone();
     }
 
     @Override
-    public void setTelefone(int telefone) {
+    public void setTelefone(long telefone) {
         super.setTelefone(telefone);
     }
 
@@ -106,6 +107,24 @@ public class ContaPoupanca extends Conta {
         super.setConta(conta);
     }
 
+    // métodos da interface
+
+    // falta o da data
+    @Override
+    public double getValor() {
+        return 0;
+    }
+
+    @Override
+    public String getDescricao() {
+        return null;
+    }
+
+    @Override
+    public int getTipoOperacao() {
+        return 0;
+    }
+
     //
     public double getSalario() {
         return salario;
@@ -115,6 +134,31 @@ public class ContaPoupanca extends Conta {
         this.salario = salario;
     }
 
+    public void addSalario(double pagamento) {
+        saldo = saldo + pagamento;
+    }
+
+    // CONFIGURAÇÃO DO PIX
+    public long pixCpf(){
+        long pix = getCpf();
+        return pix;
+    }
+
+    public String pixEmail(){
+        String pix = getEmail();
+        return pix;
+    }
+
+    public long pixTelefone(){
+        long pix = getTelefone();
+        return pix;
+    }
+
+    public int pixChaveAleatoria(){
+        Random naosei = new Random();
+        int pix = naosei.nextInt(99999999);
+        return pix;
+    }
     // metodos herdados
     @Override
     public void sacar(double valor) {
@@ -147,6 +191,26 @@ public class ContaPoupanca extends Conta {
 
     @Override
     public void configurarPix() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Como deseja configurar o Pix?");
+        System.out.println("1 - Cpf");
+        System.out.println("2 - Email");
+        System.out.println("3 - Telefone");
+        System.out.println("4 - Chave aleatória");
+        int opcao = scanner.nextInt();
+
+        if (opcao == 1){
+            pixCpf();
+        }
+        else if (opcao == 2){
+            pixEmail();
+        }
+        else if (opcao == 3){
+            pixTelefone();
+        }
+        else if (opcao == 4){
+
+        }
 
     }
 
