@@ -1,23 +1,34 @@
 package tp2.dojo3;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 public class TesteMain {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
 
+        ////////////////////
         LocalDate niver = LocalDate.of(2001, 1, 6);
         ContaCorrente conta1 = new ContaCorrente("eu", 1407927477, niver, "priscillaxtp@gmail.com", 2005984, "39438dj@@");
-
-
         System.out.println(conta1.getConta());
         System.out.println(conta1.getAgencia());
         System.out.println(conta1.getDataDeNascimento());
+        ////////////////////
 
-        // instancias
+        // instâncias
         ContaCorrente contaC = new ContaCorrente();
         ContaPoupanca contaP = new ContaPoupanca();
+
+        // arraylists
+        ArrayList lista = new ArrayList();
+
+        ArrayList<Date> listaData = new ArrayList();
+        ArrayList<String> listaDescricao = new ArrayList();
+        ArrayList<Integer> listaOperacao = new ArrayList();
+        ArrayList<Double> listavalor = new ArrayList();
 
         // outros
         int opcao;
@@ -32,9 +43,19 @@ public class TesteMain {
         long cpf, telefone;
         int dia, mes, ano;
         String nomePessoa, emailPessoa, senhaPessoa;
+        int avancar;
 
+        Date d;
+        Calendar c = Calendar.getInstance();
         do {
-            System.out.println("Menu");
+            // System.out.println("Deseja avançar dias?");
+            // avancar = scan.nextInt();
+
+            d = c.getTime();
+
+            // System.out.println(d+"\nSeja bem-vindo(a)!");
+            System.out.println("\n" + d);
+            System.out.println("O que deseja fazer?");
             System.out.println("1 - Abrir conta");
             System.out.println("2 - Depositar");
             System.out.println("3 - Sacar");
@@ -207,13 +228,47 @@ public class TesteMain {
 
                     System.out.println("Insira o valor a ser depositado: ");
                     double valorDeposito = scan.nextDouble();
-                    if (tipoConta == 1 && corrente)
+                    if (tipoConta == 1 && corrente){
                         contaC.depositar(valorDeposito);
+
+                        // extrato
+                        contaC.setValor(valorDeposito);
+                        contaC.setTipoOperacao(opcao);
+                        contaC.setDescricao("Depósito");
+                        contaC.setData(d);
+
+                        System.out.println(contaC.getValor());
+                        listavalor.add(contaC.getValor());
+                        listaOperacao.add(contaC.getTipoOperacao());
+                        listaDescricao.add(contaC.getDescricao());
+                        listaData.add(contaC.getData());
+
+                        // listaData.add(contaC)
+                        // listavalor.add(contaC.getValor());
+
+                        //lista.add(contaC.getValor() + " "+contaC.getTipoOperacao()+" "+contaC.getDescricao());
+                        //lista.add(contaC.getSalario());
+
+                        listavalor.add(contaC.getValor());
+                    }
                     else if (tipoConta == 1 && !corrente){
                         System.out.println("Você não possui conta corrente.");
                     }
-                    else if (tipoConta == 2 && poupanca)
+                    else if (tipoConta == 2 && poupanca){
                         contaP.depositar(valorDeposito);
+
+                        // extrato
+                        contaP.setValor(valorDeposito);
+                        contaP.setTipoOperacao(opcao);
+                        contaP.setDescricao("Depósito");
+                        contaP.setData(d);
+
+                        System.out.println(contaP.getValor());
+                        listavalor.add(contaP.getValor());
+                        listaOperacao.add(contaP.getTipoOperacao());
+                        listaDescricao.add(contaP.getDescricao());
+                        listaData.add(contaP.getData());
+                    }
                     else if (tipoConta == 2 && !poupanca)
                         System.out.println("Você não possui conta poupança.");
 
@@ -230,8 +285,23 @@ public class TesteMain {
                         contaP.sacar(valorSaque);
                     break;
                 case 4: // emitir extrato
+                    // imprime aqui tds as coisas
+                    int tam = listaDescricao.size();
+                    for (int i = 0; i < tam; i++){
+                        System.out.println(listaData.get(i)+" "+listaOperacao.get(i)+" "+listaDescricao.get(i)+" "+listavalor.get(i));
+                    }
+                    // pergunta se o usuário quer os detalhes de algum item
+                        // se sim, então imprime os detalhes do item
+                        // se não, sai
                     break;
                 case 5: // transferência
+                    // pergunta de qual conta quer tirar o dinheiro p transferir
+                        // se for corrente e existir...
+
+                    // pergunta o método de transferencia: agencia/conta ou pix
+                        // if agencia/conta, checa se a conta existe
+                            // procede e pergunta a qtd de dinheiro
+                                // se tiver essa qtd, então transfere
                     break;
                 case 6: // configurar pix
                     System.out.println("Deseja configurar o Pix de qual conta? (1- Corrente 2- Poupança)");
@@ -261,6 +331,7 @@ public class TesteMain {
             }
         }while(opcao !=0);
 
+        // teste output
         System.out.println("Conta corrente");
         System.out.println("Nome: "+contaC.getNome());
         System.out.println("Data de nascimento: "+ contaC.getDataDeNascimento());
@@ -284,6 +355,5 @@ public class TesteMain {
         System.out.println("Salário: "+ contaP.getSalario());
         System.out.println("Conta: "+ contaP.getConta());
         System.out.println("Agência: "+ contaP.getAgencia());
-
     }
 }

@@ -1,6 +1,7 @@
 package tp2.dojo3;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -8,6 +9,11 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     private double chequeEspecial = 3000;
     private double salario;
     private double saldo;
+
+    private double valor;
+    private String desc;
+    private int tipoOp;
+    private Date dataOp;
 
     public ContaCorrente(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
         super(nome, cpf, dataDeNascimento, email, telefone, senha);
@@ -108,23 +114,46 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
         super.setConta(conta);
     }
 
+    // sets p usar junto da interface
+    public void setValor(double valorOp) {
+        this.valor = valorOp;
+    }
+
+    public void setDescricao(String descOp){
+        this.desc = descOp;
+    }
+
+    public void setTipoOperacao(int operacao){
+        this.tipoOp = operacao;
+    }
+
+    public void setData(Date data){
+        this.dataOp = data;
+    }
+
     // métodos da interface
 
     // falta o da data
 
+
+    @Override
+    public Date getData() {
+        return dataOp;
+    }
+
     @Override
     public double getValor() {
-        return 0;
+        return valor;
     }
 
     @Override
     public String getDescricao() {
-        return null;
+        return desc;
     }
 
     @Override
     public int getTipoOperacao() {
-        return 0;
+        return tipoOp;
     }
 
     //
