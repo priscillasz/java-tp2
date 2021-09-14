@@ -1,5 +1,6 @@
 package tp2.dojo3;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public interface TransacaoEmConta {
@@ -11,7 +12,7 @@ public interface TransacaoEmConta {
     void setDescricao(String descOp);
     void setTipoOperacao(int operacao);
 
-    void setData(Date dataOp);
+    void setData(LocalDate dataOp);
 
     double getValor();
 
@@ -19,6 +20,6 @@ public interface TransacaoEmConta {
 
     int getTipoOperacao();
 
-    Date getData();
+    LocalDate getData();
 
 }

@@ -12,7 +12,8 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     private double valor;
     private String desc;
     private int tipoOp;
-    private Date dataOp;
+    private LocalDate dataOp;
+
     public ContaPoupanca(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
         super(nome, cpf, dataDeNascimento, email, telefone, senha);
     }
@@ -112,7 +113,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         super.setConta(conta);
     }
 
-    // sets p usar junto da interface
+    // métodos da interface
     public void setValor(double valorOp) {
         this.valor = valorOp;
     }
@@ -126,17 +127,12 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     }
 
     @Override
-    public void setData(Date dataOp) {
+    public void setData(LocalDate dataOp) {
         this.dataOp = dataOp;
     }
 
-    // métodos da interface
-
-
     @Override
-    public Date getData() {
-        return dataOp;
-    }
+    public LocalDate getData() { return dataOp; }
 
     @Override
     public double getValor() {
@@ -196,8 +192,6 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         }
         else{
             System.out.println("Operação inválida. Não há saldo suficiente em conta. Valor em conta: "+saldo);
-
-
         }
     }
 
@@ -239,7 +233,6 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         else if (opcao == 4){
 
         }
-
     }
 
     @Override

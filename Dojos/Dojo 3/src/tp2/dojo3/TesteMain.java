@@ -1,6 +1,10 @@
 package tp2.dojo3;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,10 +29,12 @@ public class TesteMain {
         // arraylists
         ArrayList lista = new ArrayList();
 
-        ArrayList<Date> listaData = new ArrayList();
+        // APAGAR ESSE COMENTARIO AQUI DPS
+        //ArrayList<Date> listaData = new ArrayList();
         ArrayList<String> listaDescricao = new ArrayList();
         ArrayList<Integer> listaOperacao = new ArrayList();
         ArrayList<Double> listavalor = new ArrayList();
+        ArrayList<LocalDate> listaDatas = new ArrayList<>();
 
         // outros
         int opcao;
@@ -43,18 +49,50 @@ public class TesteMain {
         long cpf, telefone;
         int dia, mes, ano;
         String nomePessoa, emailPessoa, senhaPessoa;
-        int avancar;
+        int avancar, diasAvancar;
 
         Date d;
         Calendar c = Calendar.getInstance();
+
+        // APAGAR ESSE COMENTARIO AQUI DPS
+        // LocalDate data1 = LocalDate.now();
+
         do {
-            // System.out.println("Deseja avançar dias?");
-            // avancar = scan.nextInt();
+            // avanço no tempo
+            if (corrente || poupanca){
+                System.out.println("Deseja avançar dias?");
+                avancar = scan.nextInt();
+                if (avancar == 1){
+                    System.out.println("Quantos dias?");
+                    diasAvancar = scan.nextInt();
+                    c.add(Calendar.DATE, diasAvancar);
+                    d = c.getTime();
 
-            d = c.getTime();
+                    // APAGAR ESSE COMENTARIO AQUI DPS
+                    /*diasAvancar = scan.nextInt();
+                    LocalDate data2 = data1.plusDays(diasAvancar);*/
+                }
+                else {
+                    d = c.getTime();
 
-            // System.out.println(d+"\nSeja bem-vindo(a)!");
-            System.out.println("\n" + d);
+                    // APAGAR ESSE COMENTARIO AQUI DPS
+                    //data1 = LocalDate.now();
+                }
+            }
+            else {
+                d = c.getTime();
+                // APAGAR ESSE COMENTARIO AQUI DPS
+                // LocalDate horarios = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                //LocalDate novaDatah = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(d));
+                // LocalDate horario = LocalDateTime.parse(d, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            }
+
+            // formata a data
+            LocalDate novaData = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
+
+            // MENU
+            System.out.println(d+"\nSeja bem-vindo(a)!");
+            System.out.println(novaData);
             System.out.println("O que deseja fazer?");
             System.out.println("1 - Abrir conta");
             System.out.println("2 - Depositar");
@@ -235,21 +273,23 @@ public class TesteMain {
                         contaC.setValor(valorDeposito);
                         contaC.setTipoOperacao(opcao);
                         contaC.setDescricao("Depósito");
-                        contaC.setData(d);
+                        contaC.setData(novaData);
 
-                        System.out.println(contaC.getValor());
                         listavalor.add(contaC.getValor());
                         listaOperacao.add(contaC.getTipoOperacao());
                         listaDescricao.add(contaC.getDescricao());
-                        listaData.add(contaC.getData());
+                        listaDatas.add(contaC.getData());
 
+                        // APAGAR ESSE COMENTARIO AQUI DPS
+                        //listaData.add(contaC.getData());
+
+                        // APAGAR ESSE COMENTARIO AQUI DPS
                         // listaData.add(contaC)
                         // listavalor.add(contaC.getValor());
-
                         //lista.add(contaC.getValor() + " "+contaC.getTipoOperacao()+" "+contaC.getDescricao());
                         //lista.add(contaC.getSalario());
 
-                        listavalor.add(contaC.getValor());
+                        // listavalor.add(contaC.getValor());
                     }
                     else if (tipoConta == 1 && !corrente){
                         System.out.println("Você não possui conta corrente.");
@@ -261,13 +301,15 @@ public class TesteMain {
                         contaP.setValor(valorDeposito);
                         contaP.setTipoOperacao(opcao);
                         contaP.setDescricao("Depósito");
-                        contaP.setData(d);
+                        contaP.setData(novaData);
 
-                        System.out.println(contaP.getValor());
                         listavalor.add(contaP.getValor());
                         listaOperacao.add(contaP.getTipoOperacao());
                         listaDescricao.add(contaP.getDescricao());
-                        listaData.add(contaP.getData());
+                        listaDatas.add(contaP.getData());
+
+                        // APAGAR ESSE COMENTARIO AQUI DPS
+                        // listaData.add(contaP.getData());
                     }
                     else if (tipoConta == 2 && !poupanca)
                         System.out.println("Você não possui conta poupança.");
@@ -288,7 +330,7 @@ public class TesteMain {
                     // imprime aqui tds as coisas
                     int tam = listaDescricao.size();
                     for (int i = 0; i < tam; i++){
-                        System.out.println(listaData.get(i)+" "+listaOperacao.get(i)+" "+listaDescricao.get(i)+" "+listavalor.get(i));
+                        System.out.println(listaDatas.get(i)+" "+listaOperacao.get(i)+" "+listaDescricao.get(i)+" "+listavalor.get(i));
                     }
                     // pergunta se o usuário quer os detalhes de algum item
                         // se sim, então imprime os detalhes do item

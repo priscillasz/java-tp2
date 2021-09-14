@@ -13,8 +13,22 @@ public class Testecalendario {
         // System.out.println(d);
 
         Calendar f = Calendar.getInstance();
+
+        LocalDate date = LocalDate.now();
+        LocalDate novaData = date.plusDays(45);
+        LocalDate proxMes = date.plusMonths(1);
+
+        System.out.println(date);
+        System.out.println(novaData);
+        System.out.println(proxMes);
         // Date g = f.getTime();
         // System.out.println(g);
+
+        //
+
+        // pegar o dia do pagamento
+        int dia = date.getDayOfMonth();
+        System.out.println(dia);
 
         /*System.out.println("Add meses");
         for (int i = 0; i < 3; i++){
