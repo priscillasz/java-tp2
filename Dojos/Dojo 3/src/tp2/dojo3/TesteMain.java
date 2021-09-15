@@ -14,14 +14,6 @@ public class TesteMain {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
 
-        ////////////////////
-        LocalDate niver = LocalDate.of(2001, 1, 6);
-        ContaCorrente conta1 = new ContaCorrente("eu", 1407927477, niver, "priscillaxtp@gmail.com", 2005984, "39438dj@@");
-        System.out.println(conta1.getConta());
-        System.out.println(conta1.getAgencia());
-        System.out.println(conta1.getDataDeNascimento());
-        ////////////////////
-
         // instâncias
         ContaCorrente contaC = new ContaCorrente();
         ContaPoupanca contaP = new ContaPoupanca();
@@ -33,15 +25,13 @@ public class TesteMain {
         ArrayList<LocalDate> listaDatas = new ArrayList<>();
 
         // variáveis
-        int opcao;
-        int tipoConta;
-        int ehSalario;
-
+        int opcao, tipoConta, ehSalario, diaPag;
         double salario;
-        int diaPag;
 
         boolean corrente = false;
         boolean poupanca = false;
+
+        boolean salarioRecebido = false;
 
         long cpf, telefone;
         int dia, mes, ano;
@@ -53,9 +43,6 @@ public class TesteMain {
         LocalDate novaData;
 
         do {
-            System.out.println("Conta corrente: "+contaC.getSaldo());
-            System.out.println("Conta poupança: "+contaP.getSaldo());
-
             // avanço no tempo
             if (corrente || poupanca) {
                 System.out.println("1- Avançar dias");
@@ -86,9 +73,22 @@ public class TesteMain {
             // formata a data
             novaData = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
 
-            // MENU
+            /* A primeira conta a ser criada tem a opção de ser salário ou não. A segunda conta criada nunca é salário. */
+            // adicionar salário
+            if (contaC.getDiaPagamento() <= novaData.getDayOfMonth()) {
+                contaC.addSalario(contaC.getSalario());
+            }
+            else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth()) {
+                contaP.addSalario(contaP.getSalario());
+            }
+
+            // intro
             System.out.println("Seja bem-vindo(a)!");
             System.out.println(novaData+"\n");
+            System.out.println("Conta corrente: "+contaC.getSaldo());
+            System.out.println("Conta poupança: "+contaP.getSaldo());
+
+            // MENU
             System.out.println("O que deseja fazer?");
             System.out.println("1 - Abrir conta");
             System.out.println("2 - Depositar");
@@ -146,12 +146,11 @@ public class TesteMain {
                                 salario = scan.nextDouble();
 
                                 contaC.setSalario(salario);
-                                contaC.addSalario(salario);
+                                // contaC.addSalario(salario);
                                 // data de pagamento
                                  System.out.println("Informe o dia do pagamento:");
                                  diaPag = scan.nextInt();
-                                contaC.setDiaPagamento(diaPag);
-
+                                 contaC.setDiaPagamento(diaPag);
                             }
                             else
                                 continue;
@@ -221,7 +220,8 @@ public class TesteMain {
                                 salario = scan.nextDouble();
 
                                 contaP.setSalario(salario);
-                                contaP.addSalario(salario);
+                                // contaP.addSalario(salario);
+
                                 // data de pagamento
                                 System.out.println("Informe o dia do pagamento:");
                                 diaPag = scan.nextInt();
