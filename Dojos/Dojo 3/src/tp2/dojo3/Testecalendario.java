@@ -2,25 +2,50 @@ package tp2.dojo3;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Testecalendario {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         Calendar c= Calendar.getInstance();
-        c.add(Calendar.DATE, 30);
+        c.add(Calendar.DATE, 6);
         Date d=c.getTime();
-        // System.out.println(d);
+        Calendar teste = Calendar.getInstance();
+        Date n = teste.getTime();
+        //c.add(Calendar.DATE, 7);
+        System.out.println(d);
+        System.out.println(n);
+        Date d2 = teste.getTime();
+        Date d3 = c.getTime();
+        long subDate = d3.getTime() - d2.getTime();
+        long difference = (subDate / (1000 * 60 * 60 * 24)) % 365;
+        System.out.println(difference);
+
+
+        LocalDate pagamento = LocalDate.now();
+        LocalDate vencimento = LocalDate.of(2021,9,20);
+
+        int pegames = pagamento.getMonthValue();
 
         Calendar f = Calendar.getInstance();
-
         LocalDate date = LocalDate.now();
         LocalDate novaData = date.plusDays(45);
         LocalDate proxMes = date.plusMonths(1);
 
+
+        // date.datesUntil(novaData);
+
         System.out.println(date);
         System.out.println(novaData);
+
+        //System.out.println(sumDate);
+        //long diff = TimeUnit.DAYS.convert(sumDate, TimeUnit.MILLISECONDS);
+        //System.out.println("diff: "+diff);
+
         System.out.println(proxMes);
+
+
         // Date g = f.getTime();
         // System.out.println(g);
 

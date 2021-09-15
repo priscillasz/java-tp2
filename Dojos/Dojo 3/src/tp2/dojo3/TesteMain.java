@@ -27,21 +27,18 @@ public class TesteMain {
         ContaPoupanca contaP = new ContaPoupanca();
 
         // arraylists
-        ArrayList lista = new ArrayList();
-
-        // APAGAR ESSE COMENTARIO AQUI DPS
-        //ArrayList<Date> listaData = new ArrayList();
-        ArrayList<String> listaDescricao = new ArrayList();
-        ArrayList<Integer> listaOperacao = new ArrayList();
-        ArrayList<Double> listavalor = new ArrayList();
+        ArrayList<String> listaDescricao = new ArrayList<>();
+        ArrayList<Integer> listaOperacao = new ArrayList<>();
+        ArrayList<Double> listavalor = new ArrayList<>();
         ArrayList<LocalDate> listaDatas = new ArrayList<>();
 
-        // outros
+        // variáveis
         int opcao;
         int tipoConta;
         int ehSalario;
 
         double salario;
+        int diaPag;
 
         boolean corrente = false;
         boolean poupanca = false;
@@ -53,46 +50,45 @@ public class TesteMain {
 
         Date d;
         Calendar c = Calendar.getInstance();
-
-        // APAGAR ESSE COMENTARIO AQUI DPS
-        // LocalDate data1 = LocalDate.now();
+        LocalDate novaData;
 
         do {
+            System.out.println("Conta corrente: "+contaC.getSaldo());
+            System.out.println("Conta poupança: "+contaP.getSaldo());
+
             // avanço no tempo
-            if (corrente || poupanca){
-                System.out.println("Deseja avançar dias?");
+            if (corrente || poupanca) {
+                System.out.println("1- Avançar dias");
+                System.out.println("2- Avançar para o próximo mês");
+                System.out.println("3- Avançar para o próximo dia de pagamento");
+                System.out.println("0- Continuar");
                 avancar = scan.nextInt();
-                if (avancar == 1){
+                if (avancar == 1){ // avançar x dias
                     System.out.println("Quantos dias?");
                     diasAvancar = scan.nextInt();
                     c.add(Calendar.DATE, diasAvancar);
                     d = c.getTime();
-
-                    // APAGAR ESSE COMENTARIO AQUI DPS
-                    /*diasAvancar = scan.nextInt();
-                    LocalDate data2 = data1.plusDays(diasAvancar);*/
                 }
-                else {
+                else if (avancar == 2) { // avançar proximo mes
+                    c.add(Calendar.MONTH, 1);
                     d = c.getTime();
-
-                    // APAGAR ESSE COMENTARIO AQUI DPS
-                    //data1 = LocalDate.now();
+                    double rendimentoSaldo = contaP.getSaldo() + (contaP.getSaldo() * 0.3);
+                    contaP.setSaldo(rendimentoSaldo);
+                }
+                else { // 0
+                    d = c.getTime();
                 }
             }
             else {
                 d = c.getTime();
-                // APAGAR ESSE COMENTARIO AQUI DPS
-                // LocalDate horarios = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                //LocalDate novaDatah = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(d));
-                // LocalDate horario = LocalDateTime.parse(d, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             }
 
             // formata a data
-            LocalDate novaData = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
+            novaData = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
 
             // MENU
-            System.out.println(d+"\nSeja bem-vindo(a)!");
-            System.out.println(novaData);
+            System.out.println("Seja bem-vindo(a)!");
+            System.out.println(novaData+"\n");
             System.out.println("O que deseja fazer?");
             System.out.println("1 - Abrir conta");
             System.out.println("2 - Depositar");
@@ -103,7 +99,6 @@ public class TesteMain {
             System.out.println("7 - Pagar boleto");
             System.out.println("0 - Sair");
             opcao = scan.nextInt();
-
 
             switch (opcao){
                 case 1: // adicionar conta
@@ -153,7 +148,9 @@ public class TesteMain {
                                 contaC.setSalario(salario);
                                 contaC.addSalario(salario);
                                 // data de pagamento
-                                // System.out.println("Informe o dia do pagamento:");
+                                 System.out.println("Informe o dia do pagamento:");
+                                 diaPag = scan.nextInt();
+                                contaC.setDiaPagamento(diaPag);
 
                             }
                             else
@@ -226,8 +223,9 @@ public class TesteMain {
                                 contaP.setSalario(salario);
                                 contaP.addSalario(salario);
                                 // data de pagamento
-                                // System.out.println("Informe o dia do pagamento:");
-
+                                System.out.println("Informe o dia do pagamento:");
+                                diaPag = scan.nextInt();
+                                contaP.setDiaPagamento(diaPag);
                             }
                             else
                                 continue;
@@ -272,24 +270,13 @@ public class TesteMain {
                         // extrato
                         contaC.setValor(valorDeposito);
                         contaC.setTipoOperacao(opcao);
-                        contaC.setDescricao("Depósito");
+                        contaC.setDescricao("Depósito em conta corrente");
                         contaC.setData(novaData);
 
                         listavalor.add(contaC.getValor());
                         listaOperacao.add(contaC.getTipoOperacao());
                         listaDescricao.add(contaC.getDescricao());
                         listaDatas.add(contaC.getData());
-
-                        // APAGAR ESSE COMENTARIO AQUI DPS
-                        //listaData.add(contaC.getData());
-
-                        // APAGAR ESSE COMENTARIO AQUI DPS
-                        // listaData.add(contaC)
-                        // listavalor.add(contaC.getValor());
-                        //lista.add(contaC.getValor() + " "+contaC.getTipoOperacao()+" "+contaC.getDescricao());
-                        //lista.add(contaC.getSalario());
-
-                        // listavalor.add(contaC.getValor());
                     }
                     else if (tipoConta == 1 && !corrente){
                         System.out.println("Você não possui conta corrente.");
@@ -300,16 +287,13 @@ public class TesteMain {
                         // extrato
                         contaP.setValor(valorDeposito);
                         contaP.setTipoOperacao(opcao);
-                        contaP.setDescricao("Depósito");
+                        contaP.setDescricao("Depósito em conta poupança");
                         contaP.setData(novaData);
 
                         listavalor.add(contaP.getValor());
                         listaOperacao.add(contaP.getTipoOperacao());
                         listaDescricao.add(contaP.getDescricao());
                         listaDatas.add(contaP.getData());
-
-                        // APAGAR ESSE COMENTARIO AQUI DPS
-                        // listaData.add(contaP.getData());
                     }
                     else if (tipoConta == 2 && !poupanca)
                         System.out.println("Você não possui conta poupança.");
@@ -321,6 +305,11 @@ public class TesteMain {
 
                     System.out.println("Insira o valor a ser sacado:");
                     double valorSaque = scan.nextDouble();
+
+                    // adicionar a excessao: if tipoconta == 1 e corrente -> sacar
+                    // if tipoconta == 1 e !corrente -> vc n tem corrente
+                    // if tipoconta == 2 e poupanca -> sacar
+                    // if tipoconta == 2 e !poupanca -> vc n tem poupança
                     if (tipoConta == 1)
                         contaC.sacar(valorSaque);
                     else if (tipoConta == 2)
@@ -329,11 +318,27 @@ public class TesteMain {
                 case 4: // emitir extrato
                     // imprime aqui tds as coisas
                     int tam = listaDescricao.size();
+
+                    // falta só deixar bonito
+                    System.out.println("Data     Operação       Descrição               Valor");
                     for (int i = 0; i < tam; i++){
                         System.out.println(listaDatas.get(i)+" "+listaOperacao.get(i)+" "+listaDescricao.get(i)+" "+listavalor.get(i));
                     }
                     // pergunta se o usuário quer os detalhes de algum item
+                    System.out.println("Deseja visualizar os detalhes de algum item? (1 - sim 0 - não)");
+                    int verItem = scan.nextInt();
+
                         // se sim, então imprime os detalhes do item
+                        if (verItem == 1) {
+                            System.out.println("Insira o número do item que quer visualizar:");
+                            int viewItem = scan.nextInt();
+
+                            for (int i = 0; i < tam; i++) {
+                                if (i == viewItem) {
+                                    // print os detalhes aqui...
+                                }
+                            }
+                        }
                         // se não, sai
                     break;
                 case 5: // transferência
@@ -364,7 +369,25 @@ public class TesteMain {
                     break;
                 case 7: // pagar boleto
                     // escolher qual conta vai usar para pagar o boleto
+                    System.out.println("Com qual conta quer pagar o boleto? (1- Corrente 2- Poupança)");
+                    tipoConta = scan.nextInt();
+
                     // if tipoconta == 1 e corrente -> contaC.pagarboleto();
+                    if (tipoConta == 1 && corrente) {
+                        contaC.pagarBoleto(novaData);
+                    }
+                    // if tipoconta == 1 e !corrente -> "você não possui conta corrente"
+                    else if (tipoConta == 1 && !corrente) {
+                        System.out.println("Você não possui conta corrente.");
+                    }
+                    // if tipoconta == 2 e poupanca -> contaP.pagarboleto();
+                    else if (tipoConta == 2 && poupanca) {
+
+                    }
+                    // if tipoconta == 2 e !poupanca -> "você não possui conta poupança"
+                    else if (tipoConta == 2 && !poupanca) {
+                        System.out.println("Você não possui conta poupança.");
+                    }
                     break;
                 default:
                     if (opcao != 0)

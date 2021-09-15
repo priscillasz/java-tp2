@@ -1,19 +1,21 @@
 package tp2.dojo3;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
 public class ContaPoupanca extends Conta implements TransacaoEmConta{
     private double saldo;
     private double salario;
+    private int diaPagamento;
 
+    // interface
     private double valor;
     private String desc;
     private int tipoOp;
     private LocalDate dataOp;
 
+    // construtores
     public ContaPoupanca(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
         super(nome, cpf, dataDeNascimento, email, telefone, senha);
     }
@@ -162,6 +164,14 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         saldo = saldo + pagamento;
     }
 
+    public void setDiaPagamento(int diaPagamento) { this.diaPagamento = diaPagamento; }
+
+    public int getDiaPagamento() { return diaPagamento; }
+
+    public void setSaldo(double saldo) { this.saldo = saldo; }
+
+    public double getSaldo() { return saldo; }
+
     // CONFIGURAÇÃO DO PIX
     public long pixCpf(){
         long pix = getCpf();
@@ -236,7 +246,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     }
 
     @Override
-    public void pagarBoleto() {
+    public void pagarBoleto(LocalDate pagamento) {
 
     }
 }

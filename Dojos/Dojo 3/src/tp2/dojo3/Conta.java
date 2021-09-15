@@ -77,5 +77,5 @@ public abstract class Conta {
     public abstract void emitirExtrato();
     public abstract void transferir();
     public abstract void configurarPix();
-    public abstract void pagarBoleto();
+    public abstract void pagarBoleto(LocalDate pagamento);
 }
