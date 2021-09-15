@@ -22,6 +22,7 @@ public class Testecalendario {
         long difference = (subDate / (1000 * 60 * 60 * 24)) % 365;
         System.out.println(difference);
 
+        long diffInMinutes;
 
         LocalDate pagamento = LocalDate.now();
         LocalDate vencimento = LocalDate.of(2021,9,20);

@@ -1,15 +1,18 @@
 package tp2.dojo3;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class ContaPoupanca extends Conta implements TransacaoEmConta{
     private double saldo;
     private double salario;
     private int diaPagamento;
 
-    // interface
+    //
     private double valor;
     private String desc;
     private int tipoOp;
@@ -212,11 +215,6 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     }
 
     @Override
-    public void emitirExtrato() {
-
-    }
-
-    @Override
     public void transferir() {
 
     }
@@ -246,7 +244,41 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     }
 
     @Override
-    public void pagarBoleto(LocalDate pagamento) {
+    public void pagarBoleto(LocalDate pagamento, LocalDate vencimento, double valorBoleto) {
+        Scanner scanner = new Scanner(System.in);
 
+        if (pagamento.isBefore(vencimento) || pagamento.isEqual(vencimento)) {
+            if (valorBoleto > saldo) {
+                System.out.println("Não há saldo suficiente em conta.");
+            }
+            else {
+                saldo = saldo - valorBoleto;
+                System.out.println("Pagamento de boleto realizado com sucesso.");
+            }
+        }
+        else if (pagamento.isAfter(vencimento)) {
+            // calcula dias de atraso no pagamento e depois calcula novo valor do boleto
+
+            // primeiro, converte as LocalDate pagamento e vencimento para Date
+            Date dataPagamento = Date.from(pagamento.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date dataVencimento = Date.from(vencimento.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            // calcula a diferença entre as duas datas em milisegundos
+            long diff = dataPagamento.getTime() - dataVencimento.getTime();
+            // converte a diferença para dias
+            long diasAtrasados = TimeUnit.MILLISECONDS.toDays(diff);
+
+            // cálculo do novo valor do boleto
+            valorBoleto = valorBoleto + (valorBoleto * (0.1 * diasAtrasados));
+
+            if (valorBoleto > saldo) {
+                System.out.println("Não há saldo suficiente em conta.");
+            }
+            else {
+                saldo = saldo - valorBoleto;
+                System.out.println("Atraso de "+diasAtrasados+" dias no pagamento. Valor do boleto com ajuste de multa: "+ valorBoleto);
+                System.out.println("Pagamento de boleto realizado com sucesso.");
+            }
+        }
     }
 }

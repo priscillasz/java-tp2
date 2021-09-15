@@ -1,8 +1,11 @@
 package tp2.dojo3;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class ContaCorrente extends Conta implements TransacaoEmConta {
     private double chequeEspecial = 3000;
@@ -10,7 +13,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     private double saldo;
     private int diaPagamento;
 
-    // interface
+    //
     private double valor;
     private String desc;
     private int tipoOp;
@@ -175,8 +178,6 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
 
     public int getDiaPagamento() { return diaPagamento; }
 
-
-
     // CONFIGURAÇÃO DO PIX
     public long pixCpf(){
         long pix = getCpf();
@@ -202,7 +203,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     // métodos herdados
     @Override
     public void sacar(double valor) {
-        if (valor < saldo){
+        if (valor < saldo) {
             saldo -= valor;
             System.out.println("Saque realizado com sucesso. Valor em conta: "+getSaldo());
         }
@@ -223,13 +224,13 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
 
     @Override
     public void depositar(double valor) {
-        saldo += valor;
-        System.out.println("Depósito realizado com sucesso. Valor em conta: "+saldo);
-    }
-
-    @Override
-    public void emitirExtrato() {
-
+        if (valor > 0) {
+            saldo += valor;
+            System.out.println("Depósito realizado com sucesso. Valor em conta: "+saldo);
+        }
+        else {
+            System.out.println("Valor menor ou igual a zero.");
+        }
     }
 
     @Override
@@ -262,47 +263,40 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     }
 
     @Override
-    public void pagarBoleto(LocalDate pagamento) {
+    public void pagarBoleto(LocalDate pagamento, LocalDate vencimento, double valorBoleto) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Pagamento de boleto:");
-        System.out.println("Código de barras (48 dígitos):");
-        String codigoBarras = scanner.nextLine();
-        System.out.println("Valor:");
-        double valorBoleto = scanner.nextLong();
-
-        // leitura da data
-        System.out.println("Data de vencimento:");
-        int dia = scanner.nextInt();
-        int mes = scanner.nextInt();
-        int ano = scanner.nextInt();
-        LocalDate vencimento = LocalDate.of(ano, mes, dia);
-
-        // LocalDate pagamento = LocalDate.now();
-
-        // if data de vencimento >= data atual -> procede p pagar sem multa
         if (pagamento.isBefore(vencimento) || pagamento.isEqual(vencimento)) {
-            // if valorBoleto > saldo -> não há saldo suficiente, n tem como pagar
             if (valorBoleto > saldo) {
                 System.out.println("Não há saldo suficiente em conta.");
             }
-            // else if valorBoleto <= saldo -> subtrai o valor do saldo e confirma o pagamento (saldo = saldo - valorBoleto)
             else {
                 saldo = saldo - valorBoleto;
                 System.out.println("Pagamento de boleto realizado com sucesso.");
             }
         }
-        // if data de vencimento < data atual -> boleto vencido, procede p pagar com multa de 0,1 por dia atrasado
         else if (pagamento.isAfter(vencimento)) {
-            // calcula dias de atraso no pagamento -> calcula novo valor do boleto
+            // calcula dias de atraso no pagamento e depois calcula novo valor do boleto
 
-            // if valorBoleto > saldo -> não há saldo suficiente, n tem como pagar (saldo = saldo - (valorBoleto + (valorBoleto * 0.1)
+            // primeiro, converte as LocalDate pagamento e vencimento para Date
+            Date dataPagamento = Date.from(pagamento.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date dataVencimento = Date.from(vencimento.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            // calcula a diferença entre as duas datas em milisegundos
+            long diff = dataPagamento.getTime() - dataVencimento.getTime();
+            // converte a diferença para dias
+            long diasAtrasados = TimeUnit.MILLISECONDS.toDays(diff);
+
+            // cálculo do novo valor do boleto
+            valorBoleto = valorBoleto + (valorBoleto * (0.1 * diasAtrasados));
+
             if (valorBoleto > saldo) {
-
+                System.out.println("Não há saldo suficiente em conta.");
             }
-            // else if valorBoleto <= saldo -> subtrai o valor do saldo e confirma o pagamento (saldo = saldo - (valorBoleto + (valorBoleto * 0.1)
             else {
-
+                saldo = saldo - valorBoleto;
+                System.out.println("Atraso de "+diasAtrasados+" dias no pagamento. Valor do boleto com ajuste de multa: "+ valorBoleto);
+                System.out.println("Pagamento de boleto realizado com sucesso.");
             }
         }
     }
