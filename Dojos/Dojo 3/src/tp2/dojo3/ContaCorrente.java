@@ -16,8 +16,10 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     //
     private double valor;
     private String desc;
-    private int tipoOp;
+    private String tipoOp;
     private LocalDate dataOp;
+
+    private double multaBoleto;
 
     // construtores
     public ContaCorrente(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
@@ -128,7 +130,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
         this.desc = descOp;
     }
 
-    public void setTipoOperacao(int operacao){
+    public void setTipoOperacao(String operacao){
         this.tipoOp = operacao;
     }
 
@@ -148,7 +150,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     }
 
     @Override
-    public int getTipoOperacao() {
+    public String getTipoOperacao() {
         return tipoOp;
     }
 
@@ -177,6 +179,8 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     public void setDiaPagamento(int diaPagamento) { this.diaPagamento = diaPagamento; }
 
     public int getDiaPagamento() { return diaPagamento; }
+
+    public double getMultaBoleto() { return multaBoleto; }
 
     // CONFIGURAÇÃO DO PIX
     public long pixCpf(){
@@ -289,6 +293,8 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
 
             // cálculo do novo valor do boleto
             valorBoleto = valorBoleto + (valorBoleto * (0.1 * diasAtrasados));
+
+            multaBoleto = valorBoleto * (0.1 * diasAtrasados);
 
             if (valorBoleto > saldo) {
                 System.out.println("Não há saldo suficiente em conta.");

@@ -15,8 +15,10 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     //
     private double valor;
     private String desc;
-    private int tipoOp;
+    private String tipoOp;
     private LocalDate dataOp;
+
+    private double multaBoleto;
 
     // construtores
     public ContaPoupanca(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
@@ -127,7 +129,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         this.desc = descOp;
     }
 
-    public void setTipoOperacao(int operacao){
+    public void setTipoOperacao(String operacao){
         this.tipoOp = operacao;
     }
 
@@ -150,7 +152,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     }
 
     @Override
-    public int getTipoOperacao() {
+    public String getTipoOperacao() {
         return tipoOp;
     }
 
@@ -174,6 +176,8 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     public void setSaldo(double saldo) { this.saldo = saldo; }
 
     public double getSaldo() { return saldo; }
+
+    public double getMultaBoleto() { return multaBoleto; }
 
     // CONFIGURAÇÃO DO PIX
     public long pixCpf(){
@@ -270,6 +274,8 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
 
             // cálculo do novo valor do boleto
             valorBoleto = valorBoleto + (valorBoleto * (0.1 * diasAtrasados));
+
+            multaBoleto = valorBoleto * (0.1 * diasAtrasados);
 
             if (valorBoleto > saldo) {
                 System.out.println("Não há saldo suficiente em conta.");
