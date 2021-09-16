@@ -3,10 +3,9 @@ package tp2.dojo3;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
+
+import java.util.InputMismatchException;
 
 public class TesteMain {
     public static void main(String[] args) {
@@ -36,6 +35,7 @@ public class TesteMain {
         boolean salarioRecebido = false;
         boolean poupancaSalario = false;
         boolean correnteSalario = false;
+        boolean novoMes = false;
 
         long cpf, telefone;
         int dia, mes, ano;
@@ -47,10 +47,13 @@ public class TesteMain {
         Calendar c = Calendar.getInstance();
         LocalDate novaData;
         LocalDate anoNascimento;
+        LocalDate atual;
 
         LocalDate inicio = LocalDate.now();
         int diaInicio = inicio.getDayOfMonth();
         int mesInicio = inicio.getMonthValue();
+
+        int diaAtual = 0, mesAtual;
 
         int meses = 0;
         boolean testeMeses = false;
@@ -69,20 +72,16 @@ public class TesteMain {
                     d = c.getTime();
 
                     // converte para LocalDate
-                    LocalDate atual = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
+                    atual = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
                     // pega o dia
-                    int diaAtual = atual.getDayOfMonth();
-                    int mesAtual = atual.getMonthValue();
+                    diaAtual = atual.getDayOfMonth();
+                    mesAtual = atual.getMonthValue();
 
 
-                    if (diaInicio == diaAtual) {
-                        rendimentoSaldo = contaP.getSaldo() + (contaP.getSaldo() * 0.3);
-                        contaP.setSaldo(rendimentoSaldo);
-                    }
 
                     if (mesAtual != mesInicio) {
                         salarioRecebido = false;
-
+                        novoMes = true;
                         if (mesAtual - mesInicio != 0) {
                             if (mesAtual > mesInicio) {
                                 meses = mesAtual - mesInicio;
@@ -130,8 +129,28 @@ public class TesteMain {
                 }
             }
             else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth() && poupancaSalario) {
-                contaP.addSalario(contaP.getSalario());
-                salarioRecebido = true;
+                if (salarioRecebido && !testeMeses) {
+                    System.out.println("nada");
+                }
+                else if (!salarioRecebido && !testeMeses) {
+                    contaP.addSalario(contaP.getSalario());
+                    System.out.println("to aqui");
+                    salarioRecebido = true;
+                }
+                else if (!salarioRecebido && testeMeses) {
+                    double novoSalario = meses * contaP.getSalario();
+                    System.out.println("novo salario: "+novoSalario+" Meses: "+meses);
+                    contaP.addSalario(novoSalario);
+                    salarioRecebido = true;
+                    testeMeses = false;
+                }
+            }
+
+            // rendimento
+            if (diaAtual >= diaInicio && novoMes) {
+                rendimentoSaldo = contaP.getSaldo() + (contaP.getSaldo() * 0.3);
+                contaP.setSaldo(rendimentoSaldo);
+                novoMes = false;
             }
 
             // INTRO
@@ -171,8 +190,18 @@ public class TesteMain {
                             scan.nextLine(); // buffer
                             nomePessoa = scan.nextLine();
 
-                            System.out.println("Cpf (somente números):");
-                            cpf = scan.nextLong();
+                            /*System.out.println("Cpf (somente números):");
+                            cpf = scan.nextLong();*/
+
+                            try { // arrumar isso aqui dps
+                                System.out.println("Cpf (somente números):");
+                                cpf = scan.nextLong();
+                            } catch(InputMismatchException e2) {
+                                System.out.println("Apenas números.");
+                            } finally {
+                                System.out.println("Cpf (somente números):");
+                                cpf = scan.nextLong();
+                            }
 
                             System.out.println("Data de nascimento (dia, mês e ano)");
                             System.out.println("Dia:");
@@ -260,8 +289,11 @@ public class TesteMain {
                             cpf = scan.nextLong();
 
                             System.out.println("Data de nascimento (dia, mês e ano)");
+                            System.out.println("Dia:");
                             dia = scan.nextInt();
+                            System.out.println("Mês:");
                             mes = scan.nextInt();
+                            System.out.println("Ano:");
                             ano = scan.nextInt();
                             anoNascimento = LocalDate.of(ano, mes, dia);
 
