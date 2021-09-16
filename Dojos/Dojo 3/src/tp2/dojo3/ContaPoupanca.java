@@ -13,6 +13,8 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     private int diaPagamento;
 
     //
+    private String pix;
+    //
     private double valor;
     private String desc;
     private String tipoOp;
@@ -196,19 +198,29 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     }
 
     public int pixChaveAleatoria(){
-        Random naosei = new Random();
-        int pix = naosei.nextInt(99999999);
+        Random chave = new Random();
+        int pix = chave.nextInt(99999999);
+        return pix;
+    }
+
+    public void setPix(String pix) {
+        this.pix = pix;
+    }
+
+    public String getPix() {
         return pix;
     }
     // metodos herdados
     @Override // SACAR
-    public void sacar(double valor) {
+    public boolean sacar(double valor) {
         if (valor < saldo){
             saldo -= valor;
             System.out.println("Saque realizado com sucesso. Valor em conta: "+saldo);
+            return true;
         }
         else{
             System.out.println("Operação inválida. Não há saldo suficiente em conta. Valor em conta: "+saldo);
+            return false;
         }
     }
 
@@ -262,20 +274,23 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         int opcao = scanner.nextInt();
 
         if (opcao == 1){
-            pixCpf();
+            setPix(String.format("%d", getCpf()));
         }
         else if (opcao == 2){
-            pixEmail();
+            setPix(getEmail());
         }
         else if (opcao == 3){
-            pixTelefone();
+            setPix(String.format("%d", getTelefone()));
         }
         else if (opcao == 4){
-            pixChaveAleatoria();
+            setPix("2923ty26-32x3-3d41-1x15-565jt45fc2e1");
         }
         else {
             System.out.println("Opção inválida.");
         }
+
+        System.out.println("Pix configurado com ssucesso.");
+        System.out.println("Seu pix: "+getPix());
     }
 
     @Override // PAGAMENTO DE BOLETO

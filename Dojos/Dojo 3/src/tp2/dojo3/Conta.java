@@ -72,7 +72,7 @@ public abstract class Conta {
     public void setConta(int conta) { this.conta = conta; }
 
     // métodos abstratos aqui
-    public abstract void sacar(double valor);
+    public abstract boolean sacar(double valor);
     public abstract void depositar(double valor);
     public abstract boolean transferir(double valor);
     public abstract void configurarPix();

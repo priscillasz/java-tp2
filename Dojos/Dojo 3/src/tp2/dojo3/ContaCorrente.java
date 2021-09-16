@@ -14,6 +14,8 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     private int diaPagamento;
 
     //
+    private String pix;
+    //
     private double valor;
     private String desc;
     private String tipoOp;
@@ -199,18 +201,27 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     }
 
     public int pixChaveAleatoria(){
-        Random naosei = new Random();
-        int pix = naosei.nextInt(99999999);
+        Random chave = new Random();
+        int pix = chave.nextInt(99999999);
+        return pix;
+    }
+
+    public void setPix(String pix) {
+        this.pix = pix;
+    }
+
+    public String getPix() {
         return pix;
     }
 
     // métodos herdados
 
     @Override // SACAR
-    public void sacar(double valor) {
+    public boolean sacar(double valor) {
         if (valor <= saldo) { //
             saldo -= valor;
             System.out.println("Saque realizado com sucesso. Valor em conta: "+getSaldo());
+            return true;
         }
         else if (valor > saldo){
             // double saldoRetirar = valor - (valor - saldo);
@@ -219,12 +230,15 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
                 chequeEspecial -= sobra;
                 saldo -= saldo;
                 System.out.println("Saque realizado com sucesso. Valor em conta: "+getSaldo()+" Valor restante do cheque especial: "+chequeEspecial);
+                return true;
             }
             else if (chequeEspecial < sobra) {
                 System.out.println("Operação inválida. Valor em conta não é suficiente e não há cheque especial disponível.");
                 System.out.println("Valor em conta: "+saldo+" Valor restante do cheque especial: "+chequeEspecial);
+                return false;
             }
         }
+        return false;
     }
 
     @Override // DEPOSITAR
@@ -280,24 +294,24 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
         System.out.println("4 - Chave aleatória");
         int opcao = scanner.nextInt();
 
-        String pix;
-
-        if (opcao == 1){
-            pixCpf();
-
+        if (opcao == 1) { // cpf
+            setPix(String.format("%d", getCpf()));
         }
-        else if (opcao == 2){
-            pixEmail();
+        else if (opcao == 2) { // email
+            setPix(getEmail());
         }
-        else if (opcao == 3){
-            pixTelefone();
+        else if (opcao == 3) { // telefone
+            setPix(String.format("%d", getTelefone()));
         }
-        else if (opcao == 4){
-            pixChaveAleatoria();
+        else if (opcao == 4) { // chave aleatoria
+            setPix("f29a8230-4e74-4ef8-86e5-a3e9ba74ac3d");
         }
         else {
             System.out.println("Opção inválida.");
         }
+
+        System.out.println("Pix configurado com ssucesso.");
+        System.out.println("Seu pix: "+getPix());
     }
 
     @Override // PAGAMENTO DE BOLETO
@@ -342,7 +356,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
             }
         }
         else {
-            return false; // ???
+            return false;
         }
     }
 }
