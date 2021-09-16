@@ -219,8 +219,28 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     }
 
     @Override
-    public void transferir() {
+    public void transferir(double valorTransf) {
+        if (saldo >= valorTransf) {
+            saldo -= valorTransf;
+            System.out.println("Transferência de "+valorTransf+" realizada com sucesso.");
+        }
+        else {
+            System.out.println("Não há saldo suficiente em conta.");
+        }
+    }
 
+    // transferência entre conta poupança e corrente
+    public void transferir(double valorTransf, ContaCorrente c1) {
+        if (c1 != null) {
+            if (saldo >= valorTransf) {
+                c1.setSaldo(c1.getSaldo() + valorTransf);
+                saldo -= valorTransf;
+                System.out.println("Transferência de "+valorTransf+" realizada com sucesso.");
+            }
+            else {
+                System.out.println("Não há saldo suficiente em conta.");
+            }
+        }
     }
 
     @Override

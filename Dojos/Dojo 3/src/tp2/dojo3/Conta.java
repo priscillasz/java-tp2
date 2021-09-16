@@ -74,7 +74,7 @@ public abstract class Conta {
     // métodos abstratos aqui
     public abstract void sacar(double valor);
     public abstract void depositar(double valor);
-    public abstract void transferir();
+    public abstract void transferir(double valor);
     public abstract void configurarPix();
     public abstract void pagarBoleto(LocalDate pagamento, LocalDate vencimento, double valorBoleto);
 }

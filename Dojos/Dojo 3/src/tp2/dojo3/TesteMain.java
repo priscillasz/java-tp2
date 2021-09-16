@@ -32,6 +32,9 @@ public class TesteMain {
         boolean corrente = false;
         boolean poupanca = false;
 
+        boolean recebePoupanca = false;
+        boolean recebeCorrente = false;
+
         boolean salarioRecebido = false;
         boolean poupancaSalario = false;
         boolean correnteSalario = false;
@@ -268,6 +271,26 @@ public class TesteMain {
                             contaC.setEmail(contaP.getEmail());
                             contaC.setTelefone(contaP.getTelefone());
                             contaC.setSenha(contaP.getSenha());
+
+                            if (!correnteSalario && !poupancaSalario) {
+                                System.out.println("É conta-salário? (1- Sim, 2- Não)");
+                                ehSalario = scan.nextInt();
+
+                                if (ehSalario == 1) {
+                                    // salario
+                                    System.out.println("Informe o salário:");
+                                    salario = scan.nextDouble();
+                                    // validar salario -> tem q ser > 0
+                                    System.out.println("Informe o dia do pagamento:");
+                                    diaPag = scan.nextInt();
+                                    contaC.setSalario(salario);
+                                    contaC.setDiaPagamento(diaPag);
+
+                                    correnteSalario = true;
+                                }
+                            }
+                            else
+                                continue;
                             System.out.println("Conta corrente criada com sucesso. ");
                         }
                         else if (corrente && !poupanca){
@@ -354,6 +377,23 @@ public class TesteMain {
                             contaP.setEmail(contaC.getEmail());
                             contaP.setTelefone(contaC.getTelefone());
                             contaP.setSenha(contaC.getSenha());
+
+                            if (!poupancaSalario && !correnteSalario) {
+                                System.out.println("É conta-salário? (1- Sim, 2- Não)");
+                                ehSalario = scan.nextInt();
+
+                                if (ehSalario == 1) {
+                                    // salario
+                                    System.out.println("Informe o salário:");
+                                    salario = scan.nextDouble();
+                                    // validar salario -> tem q ser > 0
+                                    System.out.println("Informe o dia do pagamento:");
+                                    diaPag = scan.nextInt();
+                                    contaP.setSalario(salario);
+                                    contaP.setDiaPagamento(diaPag);
+                                    poupancaSalario = true;
+                                }
+                            }
                             System.out.println("Conta poupança criada com sucesso.");
                         }
                         else if (!corrente && poupanca){
@@ -512,6 +552,61 @@ public class TesteMain {
                             continue;
                     break;
                 case 5: // transferência
+                    System.out.println("Qual conta você quer usar para transferir? (1- Corrente 2- Poupança)");
+                    tipoConta = scan.nextInt();
+
+                    // valida se o tipo de conta existe
+                    if (tipoConta != 1 && tipoConta != 2) {
+                        System.out.println("Tipo de conta não existe.");
+                        break;
+                    }
+
+                    // valor a transferir
+                    System.out.println("Insira o valor a ser sacado:");
+                    double valorTransferencia = scan.nextDouble();
+
+                    // valida valor de transferencia
+                    if (valorTransferencia <= 0) {
+                        System.out.println("Valor inválido.");
+                        break;
+                    }
+                    else {
+                        // checar se a transferencia vai ser feita pro agencia e conta ou pix
+                        System.out.println("Como a transferência será feita? (1- Agência e conta, 2- Pix");
+                        int tipoTransferencia = scan.nextInt();
+
+                        if (tipoTransferencia != 1 && tipoTransferencia != 2) {
+                            System.out.println("Tipo inválido");
+                            break;
+                        }
+                        else {
+                            if (tipoTransferencia == 1) {
+                                System.out.println("Número da agência: ");
+                                int numAgencia = scan.nextInt();
+                                if (numAgencia != 0001) {
+                                    System.out.println("Agência não existe.");
+                                    break;
+                                }
+
+                                System.out.println("Número da conta: ");
+                                int numConta = scan.nextInt();
+
+                                // por agencia e conta
+                                if (tipoConta == 1) {
+                                    if (numConta == contaP.getConta()) { // entre conta corrente e poupança
+                                        contaC.transferir(valorTransferencia, contaP);
+                                    }
+                                    else { // entre corrente e conta externa
+                                        contaC.transferir(valorTransferencia);
+                                    }
+                                }
+
+                                else if (tipoConta == 2) {
+                                    
+                                }
+                            }
+                        }
+                    }
                     // pergunta de qual conta quer tirar o dinheiro p transferir
                         // se for corrente e existir...
 
