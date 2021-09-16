@@ -52,6 +52,9 @@ public class TesteMain {
         int diaInicio = inicio.getDayOfMonth();
         int mesInicio = inicio.getMonthValue();
 
+        int meses = 0;
+        boolean testeMeses = false;
+
         do {
             // avanço no tempo
             if (corrente || poupanca) {
@@ -62,7 +65,9 @@ public class TesteMain {
                     System.out.println("Quantos dias?");
                     diasAvancar = scan.nextInt();
                     c.add(Calendar.DATE, diasAvancar);
+
                     d = c.getTime();
+
                     // converte para LocalDate
                     LocalDate atual = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
                     // pega o dia
@@ -77,10 +82,23 @@ public class TesteMain {
 
                     if (mesAtual != mesInicio) {
                         salarioRecebido = false;
+
+                        if (mesAtual - mesInicio != 0) {
+                            if (mesAtual > mesInicio) {
+                                meses = mesAtual - mesInicio;
+                            }
+                            else {
+                                meses = 12 - mesInicio + mesAtual;
+
+                            }
+                            System.out.println("Atual: "+mesAtual); // apagar dps
+                            System.out.println("Inicio: "+mesInicio); // apagar dps
+                            System.out.println("Meses: "+meses); // apagar dps
+                            testeMeses = true;
+                        }
                         mesInicio = mesAtual;
                     }
                 }
-
                 else { // 0
                     d = c.getTime();
                 }
@@ -95,12 +113,20 @@ public class TesteMain {
             /* A primeira conta a ser criada tem a opção de ser salário ou não. A segunda conta criada nunca é salário. ??????? */
             // adicionar salário
             if (contaC.getDiaPagamento() <= novaData.getDayOfMonth() && correnteSalario) {
-                if (salarioRecebido) {
+                if (salarioRecebido && !testeMeses) {
                     System.out.println("nada");
                 }
-                else {
+                else if (!salarioRecebido && !testeMeses) {
                     contaC.addSalario(contaC.getSalario());
+                    System.out.println("to aqui");
                     salarioRecebido = true;
+                }
+                else if (!salarioRecebido && testeMeses) {
+                    double novoSalario = meses * contaC.getSalario();
+                    System.out.println("novo salario: "+novoSalario+" Meses: "+meses);
+                    contaC.addSalario(novoSalario);
+                    salarioRecebido = true;
+                    testeMeses = false;
                 }
             }
             else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth() && poupancaSalario) {
