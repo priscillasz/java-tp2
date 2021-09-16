@@ -205,7 +205,8 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     }
 
     // métodos herdados
-    @Override
+
+    @Override // SACAR
     public void sacar(double valor) {
         if (valor <= saldo) { //
             saldo -= valor;
@@ -226,7 +227,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
         }
     }
 
-    @Override
+    @Override // DEPOSITAR
     public void depositar(double valor) {
         if (valor > 0) {
             saldo += valor;
@@ -237,7 +238,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
         }
     }
 
-    @Override
+    @Override // TRANSFERÊNCIA PARA CONTA EXTERNA
     public boolean transferir(double valorTransf) {
         if (saldo >= valorTransf) {
             saldo -= valorTransf;
@@ -250,7 +251,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
         }
     }
 
-    // transferência entre conta corrente e poupança
+    // TRANSF ENTRE CONTA CORRENTE E POUPANÇA
     public boolean transferir(double valorTransf, ContaPoupanca c1) {
         if (c1 != null) {
             if (saldo >= valorTransf) {
@@ -279,8 +280,11 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
         System.out.println("4 - Chave aleatória");
         int opcao = scanner.nextInt();
 
+        String pix;
+
         if (opcao == 1){
             pixCpf();
+
         }
         else if (opcao == 2){
             pixEmail();
@@ -296,7 +300,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
         }
     }
 
-    @Override
+    @Override // PAGAMENTO DE BOLETO
     public boolean pagarBoleto(LocalDate pagamento, LocalDate vencimento, double valorBoleto) {
         if (pagamento.isBefore(vencimento) || pagamento.isEqual(vencimento)) {
             if (valorBoleto > saldo) {

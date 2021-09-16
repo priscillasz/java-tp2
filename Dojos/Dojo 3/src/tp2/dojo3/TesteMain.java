@@ -8,8 +8,6 @@ import java.util.*;
 import java.util.InputMismatchException;
 
 public class TesteMain {
-    // static ArrayList<Double> listaTesteValores = new ArrayList<>(); apagar dps
-
     // arraylists
     static ArrayList<String> listaDescricao = new ArrayList<>();
     static ArrayList<String> listaOperacao = new ArrayList<>();
@@ -18,7 +16,6 @@ public class TesteMain {
 
     // adicionar dados de cada operação na lista do extrato
     public static void addToList(double valor, String descricao, String operacao, LocalDate dataOperacao) {
-        // listaTesteValores.add(valor);
         listavalor.add(valor);
         listaDatas.add(dataOperacao);
         listaDescricao.add(descricao);
@@ -33,14 +30,8 @@ public class TesteMain {
         ContaCorrente contaC = new ContaCorrente();
         ContaPoupanca contaP = new ContaPoupanca();
 
-        // arraylists
-        /*ArrayList<String> listaDescricao = new ArrayList<>();
-        ArrayList<String> listaOperacao = new ArrayList<>();
-        ArrayList<Double> listavalor = new ArrayList<>();
-        ArrayList<LocalDate> listaDatas = new ArrayList<>();
-        ArrayList listaDetalhes = new ArrayList();*/
-
-        // ArrayList<Double> listaTesteValores = new ArrayList<>();
+        // arraylist com detalhes de cada item do extrato
+        ArrayList listaDetalhes = new ArrayList();
 
         // variáveis
         int opcao, tipoConta, ehSalario, diaPag;
@@ -56,7 +47,7 @@ public class TesteMain {
         boolean correnteSalario = false;
         boolean novoMes = false;
 
-        boolean saqueConcluido = false;
+        boolean saqueConcluido = false; // apagar dps???
         boolean transferenciaConcluida = false;
         boolean pagBoletoConcluido = false;
 
@@ -523,22 +514,14 @@ public class TesteMain {
                     }
                     break;
                 case 4: // EMITIR EXTRATO
-                    // imprime aqui tds as coisas
+
                     int tam = listaDescricao.size();
 
-                    // falta só deixar bonito
+                    // Impressão do extrato
                     System.out.println("Data     Operação       Descrição               Valor");
                     for (int i = 0; i < tam; i++){
                         System.out.println((i+1)+ " "+ listaDatas.get(i)+" "+listaOperacao.get(i)+" "+listaDescricao.get(i)+" "+listavalor.get(i));
                     }
-
-                    // teste aqui
-                    System.out.println("teste");
-                    /*int tamListao = listaTesteValores.size();
-                    for (int i = 0; i < tamListao; i++) {
-                        System.out.println(listaTesteValores.get(i));
-                    }*/
-
 
                     // pergunta se o usuário quer os detalhes de algum item
                     System.out.println("Deseja visualizar os detalhes de algum item? (1 - sim 0 - não)");
@@ -560,6 +543,7 @@ public class TesteMain {
                         else
                             continue;
                     break;
+
                 case 5: // transferência
                     System.out.println("Qual conta você quer usar para transferir? (1- Corrente 2- Poupança)");
                     tipoConta = scan.nextInt();
@@ -604,13 +588,11 @@ public class TesteMain {
                                 // transferindo da conta corrente para a poupança ou uma conta externa...
                                 if (tipoConta == 1) {
                                     if (numConta == contaP.getConta()) { // entre conta corrente e poupança
-                                        // contaC.transferir(valorTransferencia, contaP); -> apagar dps
-
                                         if (contaC.transferir(valorTransferencia, contaP)){
                                             // add ao extrato
                                             contaC.setValor(valorTransferencia);
                                             contaC.setTipoOperacao("Transferência");
-                                            contaC.setDescricao("Transferência teste");
+                                            contaC.setDescricao("Transf. corrente p/ poupança");
                                             contaC.setData(novaData);
 
                                             addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
@@ -619,13 +601,11 @@ public class TesteMain {
                                         }
                                     }
                                     else { // entre corrente e conta externa
-                                        // contaC.transferir(valorTransferencia); -> apagar dps
-
                                         if (contaC.transferir(valorTransferencia)) {
                                             // extrato
                                             contaC.setValor(valorTransferencia);
                                             contaC.setTipoOperacao("Transferência");
-                                            contaC.setDescricao("Transferência teste");
+                                            contaC.setDescricao("Transf. corrente p/ externa");
                                             contaC.setData(novaData);
 
                                             addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
@@ -637,24 +617,40 @@ public class TesteMain {
                                 // transferindo da conta poupança para a corrente ou uma conta externa...
                                 else if (tipoConta == 2) {
                                     if (numConta == contaC.getConta()) { // entre conta poupança e corrente
-                                        contaP.transferir(valorTransferencia, contaC); // acabar isso aqui
+                                        contaP.transferir(valorTransferencia, contaC);
+                                        if (contaP.transferir(valorTransferencia, contaC)) {
+                                            // extrato
+                                            contaP.setValor(valorTransferencia);
+                                            contaP.setTipoOperacao("Transferência");
+                                            contaP.setDescricao("Transf. poupança p/ corrente");
+                                            contaP.setData(novaData);
+
+                                            addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
+                                            /*listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
+                                                    "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());*/
+                                        }
+                                    }
+                                    else { // entre poupança e externa
+                                        if (contaP.transferir(valorTransferencia)) {
+                                            contaP.setValor(valorTransferencia);
+                                            contaP.setTipoOperacao("Transferência");
+                                            contaP.setDescricao("Transf. poupança p/ externa");
+                                            contaP.setData(novaData);
+
+                                            addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
+                                            /*listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
+                                                    "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());*/
+                                        }
                                     }
                                 }
                             }
-                            else if (tipoTransferencia == 2) {
+                            else if (tipoTransferencia == 2) { // por pix FALTA ISSO AQUI
 
                             }
                         }
                     }
-                    // pergunta de qual conta quer tirar o dinheiro p transferir
-                        // se for corrente e existir...
-
-                    // pergunta o método de transferencia: agencia/conta ou pix
-                        // if agencia/conta, checa se a conta existe
-                            // procede e pergunta a qtd de dinheiro
-                                // se tiver essa qtd, então transfere
                     break;
-                case 6: // configurar pix
+                case 6: // configurar pix // FALTA ISSO AQUI
                     System.out.println("Deseja configurar o Pix de qual conta? (1- Corrente 2- Poupança)");
                     tipoConta = scan.nextInt();
 
@@ -677,6 +673,7 @@ public class TesteMain {
                     else if (tipoConta == 2 && !poupanca)
                         System.out.println("Você não possui uma conta poupança.");
                     break;
+
                 case 7: // PAGAR BOLETO
                     // escolher qual conta vai usar para pagar o boleto
                     System.out.println("Com qual conta quer pagar o boleto? (1- Corrente 2- Poupança)");
@@ -690,6 +687,7 @@ public class TesteMain {
 
                     // Dados do boleto
                     System.out.println("Pagamento de boleto:");
+                    scan.nextLine();
                     System.out.println("Código de barras (48 dígitos):");
                     String codigoBarras = scan.nextLine();
 
@@ -703,12 +701,15 @@ public class TesteMain {
 
                     // leitura da data
                     System.out.println("Data de vencimento:");
+                    System.out.println("Dia:");
                     int diaBoleto = scan.nextInt();
+                    System.out.println("Mês:");
                     int mesBoleto = scan.nextInt();
+                    System.out.println("Ano:");
                     int anoBoleto = scan.nextInt();
                     LocalDate vencimento = LocalDate.of(anoBoleto, mesBoleto, diaBoleto);
 
-                    System.out.println("Descrição do boleto: ");
+                    System.out.println("Descrição do boleto");
                     String descricaoBoleto = scan.nextLine();
 
                     if (tipoConta == 1 && corrente) {

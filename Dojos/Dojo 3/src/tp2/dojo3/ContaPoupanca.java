@@ -201,7 +201,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         return pix;
     }
     // metodos herdados
-    @Override
+    @Override // SACAR
     public void sacar(double valor) {
         if (valor < saldo){
             saldo -= valor;
@@ -212,12 +212,13 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         }
     }
 
-    @Override
+    @Override // DEPOSITAR
     public void depositar(double valor) {
         saldo += valor;
         System.out.println("Depósito realizado com sucesso. Valor em conta: "+saldo);
     }
 
+    // TRANSFERÊNCIA PARA CONTA EXTERNA
     @Override
     public boolean transferir(double valorTransf) {
         if (saldo >= valorTransf) {
@@ -231,7 +232,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         }
     }
 
-    // transferência entre conta poupança e corrente
+    // TRANSF ENTRE POUPANÇA E CORRENTE
     public boolean transferir(double valorTransf, ContaCorrente c1) {
         if (c1 != null) {
             if (saldo >= valorTransf) {
@@ -277,7 +278,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
         }
     }
 
-    @Override
+    @Override // PAGAMENTO DE BOLETO
     public boolean pagarBoleto(LocalDate pagamento, LocalDate vencimento, double valorBoleto) {
         if (pagamento.isBefore(vencimento) || pagamento.isEqual(vencimento)) {
             if (valorBoleto > saldo) {
