@@ -44,10 +44,6 @@ public class TesteMain {
         // instância da classe Scanner
         Scanner scan = new Scanner(System.in);
 
-        // instâncias
-        /*ContaCorrente contaC = new ContaCorrente();
-        ContaPoupanca contaP = new ContaPoupanca();*/
-
         // arraylist com detalhes de cada item do extrato
         ArrayList listaDetalhes = new ArrayList();
 
@@ -66,10 +62,6 @@ public class TesteMain {
         boolean novoMes = false;
         boolean pixCorrente = false;
         boolean pixPoupanca = false;
-
-        boolean saqueConcluido = false; // apagar dps???
-        boolean transferenciaConcluida = false;
-        boolean pagBoletoConcluido = false;
 
         long cpf, telefone;
         int dia, mes, ano;
@@ -95,7 +87,7 @@ public class TesteMain {
         do {
             // avanço no tempo
             if (corrente || poupanca) {
-                System.out.println("1- Avançar dias");
+                System.out.println("\n1- Avançar dias");
                 System.out.println("0- Continuar");
                 avancar = scan.nextInt();
                 if (avancar == 1){ // avançar x dias
@@ -152,7 +144,7 @@ public class TesteMain {
                 }
                 else if (!salarioRecebido && testeMeses) {
                     double novoSalario = meses * contaC.getSalario();
-                    System.out.println("novo salario: "+novoSalario+" Meses: "+meses);
+                    System.out.println("novo salario: "+novoSalario+" Meses: "+meses); // apagar isso dps
                     contaC.addSalario(novoSalario);
                     salarioRecebido = true;
                     testeMeses = false;
@@ -169,14 +161,14 @@ public class TesteMain {
                 }
                 else if (!salarioRecebido && testeMeses) {
                     double novoSalario = meses * contaP.getSalario();
-                    System.out.println("novo salario: "+novoSalario+" Meses: "+meses);
+                    System.out.println("novo salario: "+novoSalario+" Meses: "+meses); // apagar dps
                     contaP.addSalario(novoSalario);
                     salarioRecebido = true;
                     testeMeses = false;
                 }
             }
 
-            // rendimento
+            // Rendimento da poupança
             if (diaAtual >= diaInicio && novoMes) {
                 rendimentoSaldo = contaP.getSaldo() + (contaP.getSaldo() * 0.3);
                 contaP.setSaldo(rendimentoSaldo);
@@ -191,12 +183,18 @@ public class TesteMain {
                 System.out.println("Conta Corrente");
                 System.out.println("Saldo: "+contaC.getSaldo());
                 System.out.println("Agência: "+contaC.getAgencia()+" Conta: "+contaC.getConta()+"\n");
+                if (pixCorrente) {
+                    System.out.println("Pix: "+contaC.getPix());
+                }
             }
 
             if (poupanca) {
                 System.out.println("Conta Poupança");
                 System.out.println("Saldo: "+contaP.getSaldo());
                 System.out.println("Agência: "+contaP.getAgencia()+" Conta: "+contaP.getConta()+"\n");
+                if (pixPoupanca) {
+                    System.out.println("Pix: "+contaP.getPix());
+                }
             }
 
             ////////////// MENU ////////////////
@@ -216,7 +214,7 @@ public class TesteMain {
                     System.out.println("Qual tipo de conta você quer criar? (1- Corrente 2- Poupança)");
                     tipoConta = scan.nextInt();
 
-                    // valida se o tipo de conta existe
+                    // valida o tipo de conta
                     if (tipoConta != 1 && tipoConta != 2) {
                         System.out.println("Tipo de conta não existe.");
                         break;
@@ -653,7 +651,7 @@ public class TesteMain {
                         }
                     }
                     break;
-                case 6: // configurar pix // FALTA ISSO AQUI
+                case 6: // CONFIGURAR PIX
                     System.out.println("Deseja configurar o Pix de qual conta? (1- Corrente 2- Poupança)");
                     tipoConta = scan.nextInt();
 
@@ -726,8 +724,6 @@ public class TesteMain {
                     String descricaoBoleto = scan.nextLine();
 
                     if (tipoConta == 1 && corrente) {
-                        // contaC.pagarBoleto(novaData, vencimento, valorBoleto);
-
                         if (contaC.pagarBoleto(novaData, vencimento, valorBoleto)) {
                             // extrato
                             contaC.setValor(valorBoleto);
@@ -745,8 +741,6 @@ public class TesteMain {
                         System.out.println("Você não possui conta corrente.");
                     }
                     else if (tipoConta == 2 && poupanca) {
-                        // contaP.pagarBoleto(novaData, vencimento, valorBoleto);
-
                         if (contaP.pagarBoleto(novaData, vencimento, valorBoleto)) {
                             // extrato
                             contaP.setValor(valorBoleto);
@@ -769,6 +763,6 @@ public class TesteMain {
                         System.out.println("Opção inválida.");
                     break;
             }
-        }while(opcao !=0);
+        } while(opcao !=0);
     }
 }

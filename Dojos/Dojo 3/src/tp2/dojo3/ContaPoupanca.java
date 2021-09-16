@@ -11,7 +11,6 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     private double saldo;
     private double salario;
     private int diaPagamento;
-
     //
     private String pix;
     //
@@ -23,7 +22,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     private double multaBoleto;
 
     // construtores
-    public ContaPoupanca(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) {
+    public ContaPoupanca(String nome, long cpf, LocalDate dataDeNascimento, String email, int telefone, String senha) { // não foi usado
         super(nome, cpf, dataDeNascimento, email, telefone, senha);
     }
 
@@ -182,27 +181,6 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     public double getMultaBoleto() { return multaBoleto; }
 
     // CONFIGURAÇÃO DO PIX
-    public long pixCpf(){
-        long pix = getCpf();
-        return pix;
-    }
-
-    public String pixEmail(){
-        String pix = getEmail();
-        return pix;
-    }
-
-    public long pixTelefone(){
-        long pix = getTelefone();
-        return pix;
-    }
-
-    public int pixChaveAleatoria(){
-        Random chave = new Random();
-        int pix = chave.nextInt(99999999);
-        return pix;
-    }
-
     public void setPix(String pix) {
         this.pix = pix;
     }
