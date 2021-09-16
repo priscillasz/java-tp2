@@ -8,6 +8,23 @@ import java.util.*;
 import java.util.InputMismatchException;
 
 public class TesteMain {
+    // static ArrayList<Double> listaTesteValores = new ArrayList<>(); apagar dps
+
+    // arraylists
+    static ArrayList<String> listaDescricao = new ArrayList<>();
+    static ArrayList<String> listaOperacao = new ArrayList<>();
+    static ArrayList<Double> listavalor = new ArrayList<>();
+    static ArrayList<LocalDate> listaDatas = new ArrayList<>();
+
+    // adicionar dados de cada operação na lista do extrato
+    public static void addToList(double valor, String descricao, String operacao, LocalDate dataOperacao) {
+        // listaTesteValores.add(valor);
+        listavalor.add(valor);
+        listaDatas.add(dataOperacao);
+        listaDescricao.add(descricao);
+        listaOperacao.add(operacao);
+    }
+
     public static void main(String[] args) {
         // instância da classe Scanner
         Scanner scan = new Scanner(System.in);
@@ -17,11 +34,13 @@ public class TesteMain {
         ContaPoupanca contaP = new ContaPoupanca();
 
         // arraylists
-        ArrayList<String> listaDescricao = new ArrayList<>();
+        /*ArrayList<String> listaDescricao = new ArrayList<>();
         ArrayList<String> listaOperacao = new ArrayList<>();
         ArrayList<Double> listavalor = new ArrayList<>();
         ArrayList<LocalDate> listaDatas = new ArrayList<>();
-        ArrayList listaDetalhes = new ArrayList();
+        ArrayList listaDetalhes = new ArrayList();*/
+
+        // ArrayList<Double> listaTesteValores = new ArrayList<>();
 
         // variáveis
         int opcao, tipoConta, ehSalario, diaPag;
@@ -32,13 +51,14 @@ public class TesteMain {
         boolean corrente = false;
         boolean poupanca = false;
 
-        boolean recebePoupanca = false;
-        boolean recebeCorrente = false;
-
         boolean salarioRecebido = false;
         boolean poupancaSalario = false;
         boolean correnteSalario = false;
         boolean novoMes = false;
+
+        boolean saqueConcluido = false;
+        boolean transferenciaConcluida = false;
+        boolean pagBoletoConcluido = false;
 
         long cpf, telefone;
         int dia, mes, ano;
@@ -80,8 +100,6 @@ public class TesteMain {
                     diaAtual = atual.getDayOfMonth();
                     mesAtual = atual.getMonthValue();
 
-
-
                     if (mesAtual != mesInicio) {
                         salarioRecebido = false;
                         novoMes = true;
@@ -91,7 +109,6 @@ public class TesteMain {
                             }
                             else {
                                 meses = 12 - mesInicio + mesAtual;
-
                             }
                             System.out.println("Atual: "+mesAtual); // apagar dps
                             System.out.println("Inicio: "+mesInicio); // apagar dps
@@ -112,15 +129,14 @@ public class TesteMain {
             // formata a data
             novaData = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
 
-            /* A primeira conta a ser criada tem a opção de ser salário ou não. A segunda conta criada nunca é salário. ??????? */
             // adicionar salário
             if (contaC.getDiaPagamento() <= novaData.getDayOfMonth() && correnteSalario) {
                 if (salarioRecebido && !testeMeses) {
-                    System.out.println("nada");
+                    System.out.println("nada"); // apagar isso dps
                 }
                 else if (!salarioRecebido && !testeMeses) {
                     contaC.addSalario(contaC.getSalario());
-                    System.out.println("to aqui");
+                    System.out.println("to aqui"); // apagar isso dps
                     salarioRecebido = true;
                 }
                 else if (!salarioRecebido && testeMeses) {
@@ -133,11 +149,11 @@ public class TesteMain {
             }
             else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth() && poupancaSalario) {
                 if (salarioRecebido && !testeMeses) {
-                    System.out.println("nada");
+                    System.out.println("nada"); // apagar isso dps
                 }
                 else if (!salarioRecebido && !testeMeses) {
                     contaP.addSalario(contaP.getSalario());
-                    System.out.println("to aqui");
+                    System.out.println("to aqui"); // apagar isso dps
                     salarioRecebido = true;
                 }
                 else if (!salarioRecebido && testeMeses) {
@@ -156,13 +172,13 @@ public class TesteMain {
                 novoMes = false;
             }
 
-            // INTRO
+            /* *************INTRO************** */
             System.out.println("\nSeja bem-vindo(a)!");
             System.out.println(novaData+"\n");
             System.out.println("Conta corrente: "+contaC.getSaldo());
             System.out.println("Conta poupança: "+contaP.getSaldo()+"\n");
 
-            // MENU
+            ////////////// MENU ////////////////
             System.out.println("O que deseja fazer?");
             System.out.println("1 - Abrir conta");
             System.out.println("2 - Depositar");
@@ -186,7 +202,7 @@ public class TesteMain {
                     }
 
                     if (tipoConta == 1){
-                        if (!corrente && !poupanca){
+                        if (!corrente && !poupanca){ // abrir conta corrente quando nenhuma das contas existe
                             corrente = true;
 
                             System.out.println("Nome completo:");
@@ -263,7 +279,7 @@ public class TesteMain {
 
                             System.out.println("Sua conta corrente foi criada com sucesso.");
                         }
-                        else if (!corrente && poupanca){
+                        else if (!corrente && poupanca){ // abrir conta corrente quando a poupança já existe
                             corrente = true;
                             contaC.setNome(contaP.getNome());
                             contaC.setDataDeNascimento(contaP.getDataDeNascimento());
@@ -301,7 +317,7 @@ public class TesteMain {
                         }
                     }
                     if (tipoConta == 2){
-                        if (!corrente && !poupanca){
+                        if (!corrente && !poupanca){ // abrir conta poupança quando nenhuma das contas existe ainda
                             poupanca = true;
 
                             System.out.println("Nome completo:");
@@ -348,7 +364,6 @@ public class TesteMain {
                                 salario = scan.nextDouble();
 
                                 contaP.setSalario(salario);
-                                // contaP.addSalario(salario);
 
                                 // data de pagamento
                                 System.out.println("Informe o dia do pagamento:");
@@ -369,7 +384,7 @@ public class TesteMain {
                             contaP.setSenha(senhaPessoa);
                             System.out.println("Sua conta poupança foi criada com sucesso. ");
                         }
-                        else if (corrente && !poupanca){
+                        else if (corrente && !poupanca) { // abrir poupança quando conta corrente já existe
                             poupanca = true;
                             contaP.setNome(contaC.getNome());
                             contaP.setDataDeNascimento(contaC.getDataDeNascimento());
@@ -396,7 +411,7 @@ public class TesteMain {
                             }
                             System.out.println("Conta poupança criada com sucesso.");
                         }
-                        else if (!corrente && poupanca){
+                        else if (!corrente && poupanca) {
                             System.out.println("Você já tem uma conta poupança.");
                         }
                         else if (corrente && poupanca){
@@ -424,7 +439,7 @@ public class TesteMain {
                         break;
                     }
 
-                    if (tipoConta == 1 && corrente){
+                    if (tipoConta == 1 && corrente) {
                         contaC.depositar(valorDeposito);
 
                         // extrato
@@ -433,17 +448,14 @@ public class TesteMain {
                         contaC.setDescricao("Depósito em conta corrente");
                         contaC.setData(novaData);
 
-                        listavalor.add(contaC.getValor());
-                        listaOperacao.add(contaC.getTipoOperacao());
-                        listaDescricao.add(contaC.getDescricao());
-                        listaDatas.add(contaC.getData());
-                        listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
-                                "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());
+                        addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
+                        /*listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
+                                "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());*/
                     }
-                    else if (tipoConta == 1 && !corrente){
+                    else if (tipoConta == 1 && !corrente) {
                         System.out.println("Você não possui conta corrente.");
                     }
-                    else if (tipoConta == 2 && poupanca){
+                    else if (tipoConta == 2 && poupanca) {
                         contaP.depositar(valorDeposito);
 
                         // extrato
@@ -452,16 +464,12 @@ public class TesteMain {
                         contaP.setDescricao("Depósito em conta poupança");
                         contaP.setData(novaData);
 
-                        listavalor.add(contaP.getValor());
-                        listaOperacao.add(contaP.getTipoOperacao());
-                        listaDescricao.add(contaP.getDescricao());
-                        listaDatas.add(contaP.getData());
-                        listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "+contaP.getDescricao()+
-                                "\nData: "+contaP.getData()+"\nValor: "+contaP.getValor());
+                        addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
+                        /*listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "+contaP.getDescricao()+
+                                "\nData: "+contaP.getData()+"\nValor: "+contaP.getValor());*/
                     }
                     else if (tipoConta == 2 && !poupanca)
                         System.out.println("Você não possui conta poupança.");
-
                     break;
                 case 3: // SACAR
                     System.out.println("De qual conta você quer sacar? (1- Corrente 2- Poupança)");
@@ -485,38 +493,30 @@ public class TesteMain {
 
                     if (tipoConta == 1 && corrente) {
                         contaC.sacar(valorSaque);
-
                         // extrato
                         contaC.setValor(valorSaque);
                         contaC.setTipoOperacao("Saque");
                         contaC.setDescricao("Saque em conta corrente.");
                         contaC.setData(novaData);
 
-                        listavalor.add(contaC.getValor());
-                        listaOperacao.add(contaC.getTipoOperacao());
-                        listaDescricao.add(contaC.getDescricao());
-                        listaDatas.add(contaC.getData());
-                        listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
-                                "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());
+                        addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
+                        /*listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
+                                "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());*/
                     }
                     else if (tipoConta == 1 && !corrente) {
                         System.out.println("Você não possui conta corrente.");
                     }
                     else if (tipoConta == 2 && poupanca) {
                         contaP.sacar(valorSaque);
-
                         // extrato
                         contaP.setValor(valorSaque);
                         contaP.setTipoOperacao("Saque");
                         contaP.setDescricao("Saque em conta poupança.");
                         contaP.setData(novaData);
 
-                        listavalor.add(contaP.getValor());
-                        listaOperacao.add(contaP.getTipoOperacao());
-                        listaDescricao.add(contaP.getDescricao());
-                        listaDatas.add(contaP.getData());
-                        listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "+contaP.getDescricao()+
-                                "\nData: "+contaP.getData()+"\nValor: "+contaP.getValor());
+                        addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
+                        /*listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "+contaP.getDescricao()+
+                                "\nData: "+contaP.getData()+"\nValor: "+contaP.getValor());*/
                     }
                     else if (tipoConta == 2 && !poupanca) {
                         System.out.println("Você não possui conta poupança.");
@@ -531,6 +531,15 @@ public class TesteMain {
                     for (int i = 0; i < tam; i++){
                         System.out.println((i+1)+ " "+ listaDatas.get(i)+" "+listaOperacao.get(i)+" "+listaDescricao.get(i)+" "+listavalor.get(i));
                     }
+
+                    // teste aqui
+                    System.out.println("teste");
+                    /*int tamListao = listaTesteValores.size();
+                    for (int i = 0; i < tamListao; i++) {
+                        System.out.println(listaTesteValores.get(i));
+                    }*/
+
+
                     // pergunta se o usuário quer os detalhes de algum item
                     System.out.println("Deseja visualizar os detalhes de algum item? (1 - sim 0 - não)");
                     int verItem = scan.nextInt();
@@ -545,7 +554,7 @@ public class TesteMain {
                                 System.out.println("Item não existe.");
                             }
                             else {
-                                System.out.println(listaDetalhes.get(viewItem));
+                                /*System.out.println(listaDetalhes.get(viewItem));*/
                             }
                         }
                         else
@@ -571,7 +580,7 @@ public class TesteMain {
                         break;
                     }
                     else {
-                        // checar se a transferencia vai ser feita pro agencia e conta ou pix
+                        // checar se a transferencia vai ser feita por agencia e conta ou pix
                         System.out.println("Como a transferência será feita? (1- Agência e conta, 2- Pix");
                         int tipoTransferencia = scan.nextInt();
 
@@ -580,6 +589,7 @@ public class TesteMain {
                             break;
                         }
                         else {
+                            // por agencia e conta
                             if (tipoTransferencia == 1) {
                                 System.out.println("Número da agência: ");
                                 int numAgencia = scan.nextInt();
@@ -591,19 +601,48 @@ public class TesteMain {
                                 System.out.println("Número da conta: ");
                                 int numConta = scan.nextInt();
 
-                                // por agencia e conta
+                                // transferindo da conta corrente para a poupança ou uma conta externa...
                                 if (tipoConta == 1) {
                                     if (numConta == contaP.getConta()) { // entre conta corrente e poupança
-                                        contaC.transferir(valorTransferencia, contaP);
+                                        // contaC.transferir(valorTransferencia, contaP); -> apagar dps
+
+                                        if (contaC.transferir(valorTransferencia, contaP)){
+                                            // add ao extrato
+                                            contaC.setValor(valorTransferencia);
+                                            contaC.setTipoOperacao("Transferência");
+                                            contaC.setDescricao("Transferência teste");
+                                            contaC.setData(novaData);
+
+                                            addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
+                                            /*listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
+                                                    "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());*/
+                                        }
                                     }
                                     else { // entre corrente e conta externa
-                                        contaC.transferir(valorTransferencia);
+                                        // contaC.transferir(valorTransferencia); -> apagar dps
+
+                                        if (contaC.transferir(valorTransferencia)) {
+                                            // extrato
+                                            contaC.setValor(valorTransferencia);
+                                            contaC.setTipoOperacao("Transferência");
+                                            contaC.setDescricao("Transferência teste");
+                                            contaC.setData(novaData);
+
+                                            addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
+                                            /*listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
+                                                    "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());*/
+                                        }
                                     }
                                 }
-
+                                // transferindo da conta poupança para a corrente ou uma conta externa...
                                 else if (tipoConta == 2) {
-                                    
+                                    if (numConta == contaC.getConta()) { // entre conta poupança e corrente
+                                        contaP.transferir(valorTransferencia, contaC); // acabar isso aqui
+                                    }
                                 }
+                            }
+                            else if (tipoTransferencia == 2) {
+
                             }
                         }
                     }
@@ -681,13 +720,10 @@ public class TesteMain {
                         contaC.setDescricao(descricaoBoleto);
                         contaC.setData(novaData);
 
-                        listavalor.add(contaC.getValor());
-                        listaOperacao.add(contaC.getTipoOperacao());
-                        listaDescricao.add(contaC.getDescricao());
-                        listaDatas.add(contaC.getData());
-                        listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "
+                        addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
+                        /*listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "
                                 +contaC.getDescricao()+"\nData: "+contaC.getData()+"\nValor: "+contaC.getValor()+
-                                "\nCódigo de barras: "+codigoBarras+"\nData de vencimento: "+vencimento+"Multa: "+contaC.getMultaBoleto());
+                                "\nCódigo de barras: "+codigoBarras+"\nData de vencimento: "+vencimento+"Multa: "+contaC.getMultaBoleto());*/
                     }
                     else if (tipoConta == 1 && !corrente) {
                         System.out.println("Você não possui conta corrente.");
@@ -701,13 +737,10 @@ public class TesteMain {
                         contaP.setDescricao(descricaoBoleto);
                         contaP.setData(novaData);
 
-                        listavalor.add(contaP.getValor());
-                        listaOperacao.add(contaP.getTipoOperacao());
-                        listaDescricao.add(contaP.getDescricao());
-                        listaDatas.add(contaP.getData());
-                        listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "
+                        addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
+                        /*listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "
                                 +contaP.getDescricao()+"\nData: "+contaP.getData()+"\nValor: "+contaP.getValor()+
-                                "\nCódigo de barras: "+codigoBarras+"\nData de vencimento: "+vencimento+"Multa: "+contaP.getMultaBoleto());
+                                "\nCódigo de barras: "+codigoBarras+"\nData de vencimento: "+vencimento+"Multa: "+contaP.getMultaBoleto());*/
                     }
                     else if (tipoConta == 2 && !poupanca) {
                         System.out.println("Você não possui conta poupança.");

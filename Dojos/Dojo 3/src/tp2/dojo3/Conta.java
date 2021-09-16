@@ -17,6 +17,7 @@ public abstract class Conta {
     protected String agencia;
     protected int conta;
 
+    // Construtores
     public Conta(String nome, long cpf, LocalDate dataDeNascimento, String email, long telefone, String senha) {
         this.nome = nome;
         this.cpf = cpf;
@@ -28,7 +29,6 @@ public abstract class Conta {
         this.conta = random.nextInt(99999);
     }
 
-    // usar esse
     public Conta(){
         this.agencia = "0001";
         this.conta = random.nextInt(99999);
@@ -74,7 +74,7 @@ public abstract class Conta {
     // métodos abstratos aqui
     public abstract void sacar(double valor);
     public abstract void depositar(double valor);
-    public abstract void transferir(double valor);
+    public abstract boolean transferir(double valor);
     public abstract void configurarPix();
-    public abstract void pagarBoleto(LocalDate pagamento, LocalDate vencimento, double valorBoleto);
+    public abstract boolean pagarBoleto(LocalDate pagamento, LocalDate vencimento, double valorBoleto);
 }

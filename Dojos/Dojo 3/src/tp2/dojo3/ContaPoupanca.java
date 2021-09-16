@@ -219,27 +219,34 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
     }
 
     @Override
-    public void transferir(double valorTransf) {
+    public boolean transferir(double valorTransf) {
         if (saldo >= valorTransf) {
             saldo -= valorTransf;
             System.out.println("Transferência de "+valorTransf+" realizada com sucesso.");
+            return true;
         }
         else {
             System.out.println("Não há saldo suficiente em conta.");
+            return false;
         }
     }
 
     // transferência entre conta poupança e corrente
-    public void transferir(double valorTransf, ContaCorrente c1) {
+    public boolean transferir(double valorTransf, ContaCorrente c1) {
         if (c1 != null) {
             if (saldo >= valorTransf) {
                 c1.setSaldo(c1.getSaldo() + valorTransf);
                 saldo -= valorTransf;
                 System.out.println("Transferência de "+valorTransf+" realizada com sucesso.");
+                return true;
             }
             else {
                 System.out.println("Não há saldo suficiente em conta.");
+                return false;
             }
+        }
+        else {
+            return false;
         }
     }
 
@@ -263,21 +270,24 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
             pixTelefone();
         }
         else if (opcao == 4){
-
+            pixChaveAleatoria();
+        }
+        else {
+            System.out.println("Opção inválida.");
         }
     }
 
     @Override
-    public void pagarBoleto(LocalDate pagamento, LocalDate vencimento, double valorBoleto) {
-        Scanner scanner = new Scanner(System.in);
-
+    public boolean pagarBoleto(LocalDate pagamento, LocalDate vencimento, double valorBoleto) {
         if (pagamento.isBefore(vencimento) || pagamento.isEqual(vencimento)) {
             if (valorBoleto > saldo) {
                 System.out.println("Não há saldo suficiente em conta.");
+                return false;
             }
             else {
                 saldo = saldo - valorBoleto;
                 System.out.println("Pagamento de boleto realizado com sucesso.");
+                return true;
             }
         }
         else if (pagamento.isAfter(vencimento)) {
@@ -299,12 +309,17 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
 
             if (valorBoleto > saldo) {
                 System.out.println("Não há saldo suficiente em conta.");
+                return false;
             }
             else {
                 saldo = saldo - valorBoleto;
                 System.out.println("Atraso de "+diasAtrasados+" dias no pagamento. Valor do boleto com ajuste de multa: "+ valorBoleto);
                 System.out.println("Pagamento de boleto realizado com sucesso.");
+                return true;
             }
+        }
+        else {
+            return false; // ??
         }
     }
 }
