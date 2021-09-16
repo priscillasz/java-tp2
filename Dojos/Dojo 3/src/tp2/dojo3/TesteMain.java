@@ -28,11 +28,14 @@ public class TesteMain {
         int opcao, tipoConta, ehSalario, diaPag;
         double salario;
         double valorBoleto;
+        double rendimentoSaldo;
 
         boolean corrente = false;
         boolean poupanca = false;
 
         boolean salarioRecebido = false;
+        boolean poupancaSalario = false;
+        boolean correnteSalario = false;
 
         long cpf, telefone;
         int dia, mes, ano;
@@ -45,12 +48,14 @@ public class TesteMain {
         LocalDate novaData;
         LocalDate anoNascimento;
 
+        LocalDate inicio = LocalDate.now();
+        int diaInicio = inicio.getDayOfMonth();
+        int mesInicio = inicio.getMonthValue();
 
         do {
             // avanço no tempo
             if (corrente || poupanca) {
                 System.out.println("1- Avançar dias");
-                System.out.println("2- Avançar para o próximo mês");
                 System.out.println("0- Continuar");
                 avancar = scan.nextInt();
                 if (avancar == 1){ // avançar x dias
@@ -58,13 +63,24 @@ public class TesteMain {
                     diasAvancar = scan.nextInt();
                     c.add(Calendar.DATE, diasAvancar);
                     d = c.getTime();
+                    // converte para LocalDate
+                    LocalDate atual = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
+                    // pega o dia
+                    int diaAtual = atual.getDayOfMonth();
+                    int mesAtual = atual.getMonthValue();
+
+
+                    if (diaInicio == diaAtual) {
+                        rendimentoSaldo = contaP.getSaldo() + (contaP.getSaldo() * 0.3);
+                        contaP.setSaldo(rendimentoSaldo);
+                    }
+
+                    if (mesAtual != mesInicio) {
+                        salarioRecebido = false;
+                        mesInicio = mesAtual;
+                    }
                 }
-                else if (avancar == 2) { // avançar proximo mes
-                    c.add(Calendar.MONTH, 1);
-                    d = c.getTime();
-                    double rendimentoSaldo = contaP.getSaldo() + (contaP.getSaldo() * 0.3);
-                    contaP.setSaldo(rendimentoSaldo);
-                }
+
                 else { // 0
                     d = c.getTime();
                 }
@@ -78,11 +94,18 @@ public class TesteMain {
 
             /* A primeira conta a ser criada tem a opção de ser salário ou não. A segunda conta criada nunca é salário. ??????? */
             // adicionar salário
-            if (contaC.getDiaPagamento() <= novaData.getDayOfMonth()) {
-                contaC.addSalario(contaC.getSalario());
+            if (contaC.getDiaPagamento() <= novaData.getDayOfMonth() && correnteSalario) {
+                if (salarioRecebido) {
+                    System.out.println("nada");
+                }
+                else {
+                    contaC.addSalario(contaC.getSalario());
+                    salarioRecebido = true;
+                }
             }
-            else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth()) {
+            else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth() && poupancaSalario) {
                 contaP.addSalario(contaP.getSalario());
+                salarioRecebido = true;
             }
 
             // INTRO
@@ -166,6 +189,8 @@ public class TesteMain {
                                  System.out.println("Informe o dia do pagamento:");
                                  diaPag = scan.nextInt();
                                  contaC.setDiaPagamento(diaPag);
+
+                                 correnteSalario = true;
                             }
                             else
                                 continue;
@@ -248,6 +273,8 @@ public class TesteMain {
                                 System.out.println("Informe o dia do pagamento:");
                                 diaPag = scan.nextInt();
                                 contaP.setDiaPagamento(diaPag);
+
+                                poupancaSalario = true;
                             }
                             else
                                 continue;
@@ -269,7 +296,7 @@ public class TesteMain {
                             contaP.setEmail(contaC.getEmail());
                             contaP.setTelefone(contaC.getTelefone());
                             contaP.setSenha(contaC.getSenha());
-                            System.out.println("Conta poupança criada com sucesso. ");
+                            System.out.println("Conta poupança criada com sucesso.");
                         }
                         else if (!corrente && poupanca){
                             System.out.println("Você já tem uma conta poupança.");
