@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class ContaPoupanca extends Conta implements TransacaoEmConta{
+public class ContaPoupanca extends Conta implements TransacaoEmConta {
     private double saldo;
     private double salario;
     private int diaPagamento;
@@ -313,7 +313,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta{
             }
         }
         else {
-            return false; // ??
+            return false;
         }
     }
 }
