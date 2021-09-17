@@ -83,6 +83,10 @@ public class TesteMain {
         LocalDate inicio = LocalDate.now();
         int diaInicio = inicio.getDayOfMonth();
         int mesInicio = inicio.getMonthValue();
+        int anoInicio = inicio.getYear();
+
+        int mesAki = 0;
+        boolean proxMes = false;
 
         int diaAtual = 0, mesAtual = 0, anoAtual = 0;
 
@@ -161,10 +165,22 @@ public class TesteMain {
                     salarioRecebido = true;
                     testeMeses = false;
 
-                    /*for (int i = 0; i < meses; i++){
+                    for (int i = 0; i < meses; i++){
+                        if (mesAki <= 12) {
+                            mesAki = mesInicio + 1;
+                        }
 
+                        if (mesAki > 12) {
+                            mesAki = 1;
+                            anoInicio += 1;
+                            proxMes = true;
+                        }
 
-                    }*/
+                        diaSalario = LocalDate.of(anoInicio, mesAki, contaC.getDiaPagamento());
+                        setDadosCorrente(contaC.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
+                        addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
+
+                    }
                 }
             }
             else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth() && poupancaSalario) {
