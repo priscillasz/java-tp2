@@ -14,6 +14,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
     private int diaPagamento;
     //
     private String pix;
+    private double boleto;
     //
     private double valor;
     private String desc;
@@ -183,6 +184,8 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
 
     public double getMultaBoleto() { return multaBoleto; }
 
+    public double getBoleto() { return boleto; }
+
     // CONFIGURAÇÃO DO PIX
     public void setPix(String pix) {
         this.pix = pix;
@@ -318,7 +321,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
             long diasAtrasados = TimeUnit.MILLISECONDS.toDays(diff);
 
             // cálculo do novo valor do boleto
-            valorBoleto = valorBoleto + (valorBoleto * (0.1 * diasAtrasados));
+            boleto = valorBoleto + (valorBoleto * (0.1 * diasAtrasados));
 
             multaBoleto = valorBoleto * (0.1 * diasAtrasados);
 
@@ -328,7 +331,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
             }
             else {
                 saldo = saldo - valorBoleto;
-                System.out.println("Atraso de "+diasAtrasados+" dias no pagamento. Valor do boleto com ajuste de multa: "+ valorBoleto);
+                System.out.println("Atraso de "+diasAtrasados+" dias no pagamento. Valor do boleto com ajuste de multa: "+ boleto);
                 System.out.println("Pagamento de boleto realizado com sucesso.");
                 return true;
             }

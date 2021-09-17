@@ -78,12 +78,13 @@ public class TesteMain {
         LocalDate novaData;
         LocalDate anoNascimento;
         LocalDate atual;
+        LocalDate diaSalario;
 
         LocalDate inicio = LocalDate.now();
         int diaInicio = inicio.getDayOfMonth();
         int mesInicio = inicio.getMonthValue();
 
-        int diaAtual = 0, mesAtual;
+        int diaAtual = 0, mesAtual = 0, anoAtual = 0;
 
         int meses = 0;
         boolean testeMeses = false;
@@ -106,6 +107,7 @@ public class TesteMain {
                     // pega o dia
                     diaAtual = atual.getDayOfMonth();
                     mesAtual = atual.getMonthValue();
+                    anoAtual = atual.getYear();
 
                     if (mesAtual != mesInicio) {
                         salarioRecebido = false;
@@ -145,6 +147,12 @@ public class TesteMain {
                     contaC.addSalario(contaC.getSalario());
                     System.out.println("to aqui"); // apagar isso dps
                     salarioRecebido = true;
+
+                    diaSalario = LocalDate.of(anoAtual, mesAtual, contaC.getDiaPagamento());
+                    setDadosCorrente(contaC.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
+                    addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
+                    listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
+                            "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());
                 }
                 else if (!salarioRecebido && testeMeses) {
                     double novoSalario = meses * contaC.getSalario();
@@ -152,6 +160,11 @@ public class TesteMain {
                     contaC.addSalario(novoSalario);
                     salarioRecebido = true;
                     testeMeses = false;
+
+                    /*for (int i = 0; i < meses; i++){
+
+
+                    }*/
                 }
             }
             else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth() && poupancaSalario) {
@@ -538,10 +551,13 @@ public class TesteMain {
                     int tam = listaDescricao.size();
 
                     // Impressão do extrato
-                    System.out.println("Data     Operação       Descrição               Valor");
+                    System.out.println("-------------------------------------------------------------");
+                    System.out.println("Item    Data       Operação        Descrição            Valor");
+                    System.out.println("-------------------------------------------------------------");
                     for (int i = 0; i < tam; i++){
-                        System.out.println((i+1)+ " "+ listaDatas.get(i)+" "+listaOperacao.get(i)+" "+listaDescricao.get(i)+" "+listavalor.get(i));
+                        System.out.println(" "+(i+1)+"   "+ listaDatas.get(i)+" "+listaOperacao.get(i)+"   "+listaDescricao.get(i)+" "+listavalor.get(i));
                     }
+                    System.out.println("-------------------------------------------------------------");
 
                     // pergunta se o usuário quer os detalhes de algum item
                     System.out.println("Deseja visualizar os detalhes de algum item? (1 - sim 0 - não)");
@@ -565,7 +581,7 @@ public class TesteMain {
                     break;
 
                 case 5: // TRANSFERÊNCIA
-                    System.out.println("Qual conta você quer usar para transferir? (1- Corrente 2- Poupança)");
+                    System.out.println("\nQual conta você quer usar para transferir? (1- Corrente 2- Poupança)");
                     tipoConta = scan.nextInt();
 
                     // valida se o tipo de conta existe
@@ -575,7 +591,7 @@ public class TesteMain {
                     }
 
                     // checar se a transferencia vai ser feita por agência e conta OU pix
-                    System.out.println("Como a transferência será feita? (1- Agência e conta, 2- Pix");
+                    System.out.println("Como a transferência será feita? (1- Agência e conta, 2- Pix)");
                     int tipoTransferencia = scan.nextInt();
 
                     if (tipoTransferencia != 1 && tipoTransferencia != 2) {
@@ -647,6 +663,7 @@ public class TesteMain {
                         }
                         else if (tipoTransferencia == 2) { // por pix FALTA ISSO AQUI
                             System.out.println("Informe o Pix da conta: ");
+                            scan.nextLine();
                             String inputPix = scan.nextLine();
 
                             if (tipoConta == 1) { // quem transfere é a corrente
@@ -757,13 +774,14 @@ public class TesteMain {
                     int anoBoleto = scan.nextInt();
                     LocalDate vencimento = LocalDate.of(anoBoleto, mesBoleto, diaBoleto);
 
-                    System.out.println("Descrição do boleto");
+                    System.out.println("Descrição do boleto:");
+                    scan.nextLine();
                     String descricaoBoleto = scan.nextLine();
 
                     if (tipoConta == 1 && corrente) {
                         if (contaC.pagarBoleto(novaData, vencimento, valorBoleto)) {
                             // extrato
-                            setDadosCorrente(valorBoleto, descricaoBoleto, "Pagamento de boleto", novaData);
+                            setDadosCorrente(contaC.getBoleto(), descricaoBoleto, "Pagamento de boleto", novaData);
                             addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
                             listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "
                                     +contaC.getDescricao()+"\nData: "+contaC.getData()+"\nValor: "+contaC.getValor()+
@@ -776,7 +794,7 @@ public class TesteMain {
                     else if (tipoConta == 2 && poupanca) {
                         if (contaP.pagarBoleto(novaData, vencimento, valorBoleto)) {
                             // extrato
-                            setDadosPoupanca(valorBoleto, descricaoBoleto, "Pagamento de boleto", novaData);
+                            setDadosPoupanca(contaC.getBoleto(), descricaoBoleto, "Pagamento de boleto", novaData);
                             addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
                             listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "
                                     +contaP.getDescricao()+"\nData: "+contaP.getData()+"\nValor: "+contaP.getValor()+
