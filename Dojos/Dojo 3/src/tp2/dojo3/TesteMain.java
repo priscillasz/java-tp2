@@ -67,6 +67,10 @@ public class TesteMain {
         boolean pixCorrente = false;
         boolean pixPoupanca = false;
 
+        boolean outroTeste = true;
+        boolean teste2 = false;
+        boolean teste3 = false;
+
         long cpf, telefone;
         int dia, mes, ano;
         String nomePessoa, emailPessoa, senhaPessoa;
@@ -85,7 +89,7 @@ public class TesteMain {
         int mesInicio = inicio.getMonthValue();
         int anoInicio = inicio.getYear();
 
-        int mesAki = 0;
+        int mesPrint = 0;
         boolean proxMes = false;
 
         int diaAtual = 0, mesAtual = 0, anoAtual = 0;
@@ -166,20 +170,25 @@ public class TesteMain {
                     testeMeses = false;
 
                     for (int i = 0; i < meses; i++){
-                        if (mesAki <= 12) {
-                            mesAki = mesInicio + 1;
-                        }
+                        if (outroTeste)
+                            mesPrint = mesInicio;
 
-                        if (mesAki > 12) {
-                            mesAki = 1;
+                        if (mesPrint > 12 && teste3) {
+                            if (!teste2) {
+                                mesPrint = 1;
+                                teste2 = true;
+                            }
                             anoInicio += 1;
-                            proxMes = true;
                         }
+                       outroTeste = false;
 
-                        diaSalario = LocalDate.of(anoInicio, mesAki, contaC.getDiaPagamento());
+                        teste3 = true;
+                        diaSalario = LocalDate.of(anoInicio, mesPrint, contaC.getDiaPagamento());
                         setDadosCorrente(contaC.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
                         addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
-
+                        listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
+                                "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());
+                        mesPrint++;
                     }
                 }
             }
@@ -191,6 +200,12 @@ public class TesteMain {
                     contaP.addSalario(contaP.getSalario());
                     System.out.println("to aqui"); // apagar isso dps
                     salarioRecebido = true;
+
+                    diaSalario = LocalDate.of(anoAtual, mesAtual, contaP.getDiaPagamento());
+                    setDadosPoupanca(contaP.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
+                    addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
+                    listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "+contaP.getDescricao()+
+                            "\nData: "+contaP.getData()+"\nValor: "+contaP.getValor());
                 }
                 else if (!salarioRecebido && testeMeses) {
                     double novoSalario = meses * contaP.getSalario();
@@ -198,6 +213,28 @@ public class TesteMain {
                     contaP.addSalario(novoSalario);
                     salarioRecebido = true;
                     testeMeses = false;
+
+                    for (int i = 0; i < meses; i++) {
+                        if (outroTeste)
+                            mesPrint = mesInicio;
+
+                        if (mesPrint > 12 && teste3) {
+                            if (!teste2) {
+                                mesPrint = 1;
+                                teste2 = true;
+                            }
+                            anoInicio += 1;
+                        }
+                        outroTeste = false;
+
+                        teste3 = true;
+                        diaSalario = LocalDate.of(anoInicio, mesPrint, contaP.getDiaPagamento());
+                        setDadosPoupanca(contaP.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
+                        addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
+                        listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "+contaP.getDescricao()+
+                                "\nData: "+contaP.getData()+"\nValor: "+contaP.getValor());
+                        mesPrint++;
+                    }
                 }
             }
 
