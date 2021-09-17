@@ -7,9 +7,7 @@ import java.util.*;
 
 import java.util.InputMismatchException;
 
-// TODO: extrato: arrumar print do extrato
 // FIXME tempo: if (diaPagamento < hoje) e a pessoa acabou de criar a conta, então o salário só cai no próximo mês.
-// FIXME extrato: colocar recebimento de salário no extrato;
 
 public class TesteMain {
     // instâncias das constas
@@ -22,7 +20,7 @@ public class TesteMain {
     static ArrayList<Double> listavalor = new ArrayList<>();
     static ArrayList<LocalDate> listaDatas = new ArrayList<>();
 
-    // adicionar dados de cada operação na lista do extrato
+    // adicionar dados de cada operação nas listas do extrato
     public static void addToList(double valor, String descricao, String operacao, LocalDate dataOperacao) {
         listavalor.add(valor);
         listaDatas.add(dataOperacao);
@@ -30,6 +28,7 @@ public class TesteMain {
         listaOperacao.add(operacao);
     }
 
+    // settar os dados das operações da conta corrente para que elas possam ser usadas no extrato
     public static void setDadosCorrente(double valor, String descricao, String operacao, LocalDate dataOperacao) {
         contaC.setValor(valor);
         contaC.setDescricao(descricao);
@@ -37,6 +36,7 @@ public class TesteMain {
         contaC.setData(dataOperacao);
     }
 
+    // settar os dados das operações da conta poupança para que elas possam ser usadas no extrato
     public static void setDadosPoupanca(double valor, String descricao, String operacao, LocalDate dataOperacao) {
         contaP.setValor(valor);
         contaP.setDescricao(descricao);
@@ -67,16 +67,17 @@ public class TesteMain {
         boolean pixCorrente = false;
         boolean pixPoupanca = false;
 
-        boolean outroTeste = true;
-        boolean teste2 = false;
-        boolean teste3 = false;
+        // variáveis que ajudam na adição do salário no extrato
+        boolean sal1 = true;
+        boolean sal2 = false;
+        boolean sal3 = false;
 
         long cpf, telefone;
         int dia, mes, ano;
         String nomePessoa, emailPessoa, senhaPessoa;
         int avancar, diasAvancar;
 
-        // datas
+        // Muitas variáveis para ajudar no cálculo das datas...
         Date d;
         Calendar c = Calendar.getInstance();
         LocalDate novaData;
@@ -97,8 +98,10 @@ public class TesteMain {
         int meses = 0;
         boolean testeMeses = false;
 
+        // Loop do...while para continuar dentro do menu enquanto o usuário não digita '0'
         do {
-            // avanço no tempo
+            // Menu de "avanço no tempo". O usuário pode avançar x dias.
+            // A maioria dos testes foi realizada com valores entre 1 e 60.
             if (corrente || poupanca) {
                 System.out.println("\n1- Avançar dias");
                 System.out.println("0- Continuar");
@@ -106,18 +109,19 @@ public class TesteMain {
                 if (avancar == 1){ // avançar x dias
                     System.out.println("Quantos dias?");
                     diasAvancar = scan.nextInt();
-                    c.add(Calendar.DATE, diasAvancar);
+                    c.add(Calendar.DATE, diasAvancar); // Adiciona a data atual a quantidade de dias.
 
-                    d = c.getTime();
+                    d = c.getTime(); // A partir do calendário c, gera a data d.
 
                     // converte para LocalDate
-                    atual = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
-                    // pega o dia
+                    atual = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d)); // converte a Date d para LocalDate
+                    // Pega o dia, mês e ano atual individualmente...
                     diaAtual = atual.getDayOfMonth();
                     mesAtual = atual.getMonthValue();
                     anoAtual = atual.getYear();
 
                     if (mesAtual != mesInicio) {
+                        // Toda vez que o mês muda, o status do salário muda para não recebido, assim ele pode acontecer novamente.
                         salarioRecebido = false;
                         novoMes = true;
                         if (mesAtual - mesInicio != 0) {
@@ -143,7 +147,7 @@ public class TesteMain {
                 d = c.getTime();
             }
 
-            // formata a data
+            // formata a data que será usada no corpo do menu
             novaData = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(d));
 
             // adicionar salário
@@ -156,6 +160,7 @@ public class TesteMain {
                     System.out.println("to aqui"); // apagar isso dps
                     salarioRecebido = true;
 
+                    // adicionar o salário no extrato
                     diaSalario = LocalDate.of(anoAtual, mesAtual, contaC.getDiaPagamento());
                     setDadosCorrente(contaC.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
                     addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
@@ -170,19 +175,20 @@ public class TesteMain {
                     testeMeses = false;
 
                     for (int i = 0; i < meses; i++){
-                        if (outroTeste)
+                        if (sal1)
                             mesPrint = mesInicio;
 
-                        if (mesPrint > 12 && teste3) {
-                            if (!teste2) {
+                        if (mesPrint > 12 && sal3) {
+                            if (!sal2) {
                                 mesPrint = 1;
-                                teste2 = true;
+                                sal2 = true;
                             }
                             anoInicio += 1;
                         }
-                       outroTeste = false;
+                       sal1 = false;
 
-                        teste3 = true;
+                        sal3 = true;
+                        // adicionar o salário no extrato
                         diaSalario = LocalDate.of(anoInicio, mesPrint, contaC.getDiaPagamento());
                         setDadosCorrente(contaC.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
                         addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
@@ -215,19 +221,19 @@ public class TesteMain {
                     testeMeses = false;
 
                     for (int i = 0; i < meses; i++) {
-                        if (outroTeste)
+                        if (sal1)
                             mesPrint = mesInicio;
 
-                        if (mesPrint > 12 && teste3) {
-                            if (!teste2) {
+                        if (mesPrint > 12 && sal3) {
+                            if (!sal2) {
                                 mesPrint = 1;
-                                teste2 = true;
+                                sal2 = true;
                             }
                             anoInicio += 1;
                         }
-                        outroTeste = false;
+                        sal1 = false;
 
-                        teste3 = true;
+                        sal3 = true;
                         diaSalario = LocalDate.of(anoInicio, mesPrint, contaP.getDiaPagamento());
                         setDadosPoupanca(contaP.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
                         addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
