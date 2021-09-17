@@ -7,7 +7,9 @@ import java.util.*;
 
 import java.util.InputMismatchException;
 
-// FIXME tempo: if (diaPagamento < hoje) e a pessoa acabou de criar a conta, então o salário só cai no próximo mês.
+// FIXME tempo: if (diaPagamento < hoje) e a pessoa acabou de criar a conta, então o salário só deve cair no próximo mês.
+// Ex: hoje: 15/09, dia pagamento: 13. qnd a pessoa cria a conta no dia 15/09, o pagamento do dia 13 já aparece, mas não deveria.
+// ele só deve aparecer no proximo dia 13, que é 13/10 no caso, no próximo mes.
 
 public class TesteMain {
     // instâncias das constas
@@ -304,18 +306,8 @@ public class TesteMain {
                             scan.nextLine(); // buffer
                             nomePessoa = scan.nextLine();
 
-                            /*System.out.println("Cpf (somente números):");
-                            cpf = scan.nextLong();*/
-
-                            try { // arrumar isso aqui dps
-                                System.out.println("Cpf (somente números):");
-                                cpf = scan.nextLong();
-                            } catch(InputMismatchException e2) {
-                                System.out.println("Apenas números.");
-                            } finally {
-                                System.out.println("Cpf (somente números):");
-                                cpf = scan.nextLong();
-                            }
+                            System.out.println("Cpf (somente números):");
+                            cpf = scan.nextLong();
 
                             System.out.println("Data de nascimento (dia, mês e ano)");
                             System.out.println("Dia:");
@@ -350,19 +342,30 @@ public class TesteMain {
 
                             if (ehSalario == 1){
                                 // salario
-                                System.out.println("Informe o salário:");
-                                salario = scan.nextDouble();
+                                do {
+                                    System.out.println("Informe o salário:");
+                                    salario = scan.nextDouble();
+
+                                    if (salario <= 0) {
+                                        System.out.println("Valor inválido.");
+                                    }
+                                } while (salario <= 0);
 
                                 contaC.setSalario(salario);
                                 // data de pagamento
-                                 System.out.println("Informe o dia do pagamento:");
-                                 diaPag = scan.nextInt();
+                                do {
+                                    System.out.println("Informe o dia do pagamento:");
+                                    diaPag = scan.nextInt();
+
+                                    if (diaPag<= 0) {
+                                        System.out.println("Valor inválido.");
+                                    }
+                                } while (diaPag <= 0 || diaPag > 31);
+
                                  contaC.setDiaPagamento(diaPag);
 
                                  correnteSalario = true;
                             }
-                            else
-                                continue;
 
                             // settar os atributos
                             contaC.setNome(nomePessoa);
@@ -389,19 +392,31 @@ public class TesteMain {
 
                                 if (ehSalario == 1) {
                                     // salario
-                                    System.out.println("Informe o salário:");
-                                    salario = scan.nextDouble();
-                                    // validar salario -> tem q ser > 0
-                                    System.out.println("Informe o dia do pagamento:");
-                                    diaPag = scan.nextInt();
+                                    do {
+                                        System.out.println("Informe o salário:");
+                                        salario = scan.nextDouble();
+
+                                        if (salario <= 0) {
+                                            System.out.println("Valor inválido.");
+                                        }
+                                    } while (salario <= 0);
+
+                                    do {
+                                        System.out.println("Informe o dia do pagamento:");
+                                        diaPag = scan.nextInt();
+
+                                        if (diaPag<= 0) {
+                                            System.out.println("Valor inválido.");
+                                        }
+                                    } while (diaPag <= 0 || diaPag > 31);
+
                                     contaC.setSalario(salario);
                                     contaC.setDiaPagamento(diaPag);
 
                                     correnteSalario = true;
                                 }
                             }
-                            else
-                                continue;
+
                             System.out.println("Conta corrente criada com sucesso. ");
                         }
                         else if (corrente && !poupanca){
@@ -455,20 +470,31 @@ public class TesteMain {
 
                             if (ehSalario == 1){
                                 // salario
-                                System.out.println("Informe o salário:");
-                                salario = scan.nextDouble();
+                                do {
+                                    System.out.println("Informe o salário:");
+                                    salario = scan.nextDouble();
+
+                                    if (salario <= 0) {
+                                        System.out.println("Valor inválido.");
+                                    }
+                                } while (salario <= 0);
 
                                 contaP.setSalario(salario);
 
                                 // data de pagamento
-                                System.out.println("Informe o dia do pagamento:");
-                                diaPag = scan.nextInt();
+                                do {
+                                    System.out.println("Informe o dia do pagamento:");
+                                    diaPag = scan.nextInt();
+
+                                    if (diaPag<= 0) {
+                                        System.out.println("Valor inválido.");
+                                    }
+                                } while (diaPag <= 0 || diaPag > 31);
+
                                 contaP.setDiaPagamento(diaPag);
 
                                 poupancaSalario = true;
                             }
-                            else
-                                continue;
 
                             // setters
                             contaP.setNome(nomePessoa);
@@ -494,11 +520,25 @@ public class TesteMain {
 
                                 if (ehSalario == 1) {
                                     // salario
-                                    System.out.println("Informe o salário:");
-                                    salario = scan.nextDouble();
-                                    // validar salario -> tem q ser > 0
-                                    System.out.println("Informe o dia do pagamento:");
-                                    diaPag = scan.nextInt();
+                                    do {
+                                        System.out.println("Informe o salário:");
+                                        salario = scan.nextDouble();
+
+                                        if (salario <= 0) {
+                                            System.out.println("Valor inválido.");
+                                        }
+                                    } while (salario <= 0);
+
+                                    // dia pagamento
+                                    do {
+                                        System.out.println("Informe o dia do pagamento:");
+                                        diaPag = scan.nextInt();
+
+                                        if (diaPag<= 0) {
+                                            System.out.println("Valor inválido.");
+                                        }
+                                    } while (diaPag <= 0 || diaPag > 31);
+
                                     contaP.setSalario(salario);
                                     contaP.setDiaPagamento(diaPag);
                                     poupancaSalario = true;

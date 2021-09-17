@@ -13,7 +13,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta {
     private int diaPagamento;
     //
     private String pix;
-    private double boleto;
+
     //
     private double valor;
     private String desc;
@@ -180,8 +180,6 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta {
     public double getSaldo() { return saldo; }
 
     public double getMultaBoleto() { return multaBoleto; }
-
-    public double getBoleto() { return boleto; }
 
     // CONFIGURAÇÃO DO PIX
     public void setPix(String pix) {
