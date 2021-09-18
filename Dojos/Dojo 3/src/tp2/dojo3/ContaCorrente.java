@@ -324,7 +324,6 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
             // cálculo do novo valor do boleto
             boleto = valorBoleto * (1 + (0.01 * diasAtrasados));
 
-            // 1 + (0.01 * diasAtrasados)
             multaBoleto = boleto * (0.01 * diasAtrasados);
 
             if (valorBoleto > saldo) {

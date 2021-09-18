@@ -59,6 +59,9 @@ public class Main {
         boolean salarioRecebido = false;
         boolean poupancaSalario = false;
         boolean correnteSalario = false;
+
+        boolean primeiraData = true;
+
         boolean novoMes = false;
         boolean pixCorrente = false;
         boolean pixPoupanca = false;
@@ -71,7 +74,7 @@ public class Main {
         long cpf, telefone;
         int dia, mes, ano;
         String nomePessoa, emailPessoa, senhaPessoa;
-        int avancar, diasAvancar;
+        int avancar = 0, diasAvancar;
 
         // Muitas variáveis para ajudar no cálculo das datas...
         Date d;
@@ -144,18 +147,26 @@ public class Main {
 
             // adicionar salário
             if (contaC.getDiaPagamento() <= novaData.getDayOfMonth() && correnteSalario) {
-                if (salarioRecebido && !testeMeses) {
+                if (salarioRecebido && !testeMeses) { // redundante
                 }
                 else if (!salarioRecebido && !testeMeses) {
                     contaC.addSalario(contaC.getSalario());
                     salarioRecebido = true;
 
-                    // adicionar o salário no extrato
-                    diaSalario = LocalDate.of(anoAtual, mesAtual, contaC.getDiaPagamento());
-                    setDadosCorrente(contaC.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
-                    addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
-                    listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
-                            "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());
+                    if (contaC.getDiaPagamento() <= diaInicio && primeiraData) {
+                        if (primeiraData && avancar == 0) {
+                            contaC.setSaldo(0);
+                        }
+                        primeiraData = false;
+                    }
+                    else {
+                        diaSalario = LocalDate.of(anoAtual, mesAtual, contaC.getDiaPagamento());
+                        setDadosCorrente(contaC.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
+
+                        addToList(contaC.getValor(), contaC.getDescricao(), contaC.getTipoOperacao(), contaC.getData());
+                        listaDetalhes.add("Tipo de Operação: "+contaC.getTipoOperacao()+"\nDescrição: "+contaC.getDescricao()+
+                                "\nData: "+contaC.getData()+"\nValor: "+contaC.getValor());
+                    }
                 }
                 else if (!salarioRecebido && testeMeses) {
                     double novoSalario = meses * contaC.getSalario();
@@ -188,18 +199,25 @@ public class Main {
                 }
             }
             else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth() && poupancaSalario) {
-                if (salarioRecebido && !testeMeses) {
-                    // acho q é redudante isso aqui né, mas deixa aqui só pra não esquecer
+                if (salarioRecebido && !testeMeses) { // redundante
                 }
                 else if (!salarioRecebido && !testeMeses) {
                     contaP.addSalario(contaP.getSalario());
                     salarioRecebido = true;
 
-                    diaSalario = LocalDate.of(anoAtual, mesAtual, contaP.getDiaPagamento());
-                    setDadosPoupanca(contaP.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
-                    addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
-                    listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "+contaP.getDescricao()+
-                            "\nData: "+contaP.getData()+"\nValor: "+contaP.getValor());
+                    if (contaP.getDiaPagamento() <= diaInicio && primeiraData) {
+                        if (primeiraData && avancar == 0) {
+                            contaP.setSaldo(0);
+                        }
+                        primeiraData = false;
+                    }
+                    else {
+                        diaSalario = LocalDate.of(anoAtual, mesAtual, contaP.getDiaPagamento());
+                        setDadosPoupanca(contaP.getSalario(), "Entrada de Salário", "Depósito", diaSalario);
+                        addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
+                        listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "+contaP.getDescricao()+
+                                "\nData: "+contaP.getData()+"\nValor: "+contaP.getValor());
+                    }
                 }
                 else if (!salarioRecebido && testeMeses) {
                     double novoSalario = meses * contaP.getSalario();
@@ -302,8 +320,7 @@ public class Main {
                             System.out.println("Ano:");
                             ano = scan.nextInt();
                             anoNascimento = LocalDate.of(ano, mes, dia);
-
-                            // compara data de nascimento com a data atual... se a diferença for menor que 18, a pessoa n pode criar uma conta
+                            // compara data de nascimento com a data atual... se a diferença for menor que 18, a pessoa não pode criar uma conta
                             Period p = Period.between(anoNascimento, novaData);
 
                             // menores de 18 não podem criar contas
@@ -349,6 +366,7 @@ public class Main {
 
                                  contaC.setDiaPagamento(diaPag);
 
+                                 System.out.println(contaC.getDiaPagamento());
                                  correnteSalario = true;
                             }
 
@@ -386,6 +404,7 @@ public class Main {
                                         }
                                     } while (salario <= 0);
 
+                                    // dia de pagamento
                                     do {
                                         System.out.println("Informe o dia do pagamento:");
                                         diaPag = scan.nextInt();
@@ -471,7 +490,7 @@ public class Main {
                                     System.out.println("Informe o dia do pagamento:");
                                     diaPag = scan.nextInt();
 
-                                    if (diaPag<= 0) {
+                                    if (diaPag <= 0) {
                                         System.out.println("Valor inválido.");
                                     }
                                 } while (diaPag <= 0 || diaPag > 31);
@@ -488,7 +507,7 @@ public class Main {
                             contaP.setEmail(emailPessoa);
                             contaP.setTelefone(telefone);
                             contaP.setSenha(senhaPessoa);
-                            System.out.println("Sua conta poupança foi criada com sucesso. ");
+                            System.out.println("Sua conta poupança foi criada com sucesso.");
                         }
                         else if (corrente && !poupanca) { // abrir poupança quando conta corrente já existe
                             poupanca = true;
@@ -878,7 +897,7 @@ public class Main {
                     else if (tipoConta == 2 && poupanca) {
                         if (contaP.pagarBoleto(novaData, vencimento, valorBoleto)) {
                             // extrato
-                            setDadosPoupanca(contaC.getBoleto(), descricaoBoleto, "Pagamento de boleto", novaData);
+                            setDadosPoupanca(contaP.getBoleto(), descricaoBoleto, "Pagamento de boleto", novaData);
                             addToList(contaP.getValor(), contaP.getDescricao(), contaP.getTipoOperacao(), contaP.getData());
                             listaDetalhes.add("Tipo de Operação: "+contaP.getTipoOperacao()+"\nDescrição: "
                                     +contaP.getDescricao()+"\nData: "+contaP.getData()+"\nValor: "+contaP.getValor()+
