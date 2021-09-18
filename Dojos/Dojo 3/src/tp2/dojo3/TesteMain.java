@@ -5,14 +5,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
-import java.util.InputMismatchException;
-
-// FIXME tempo: if (diaPagamento < hoje) e a pessoa acabou de criar a conta, então o salário só deve cair no próximo mês.
-// Ex: hoje: 15/09, dia pagamento: 13. qnd a pessoa cria a conta no dia 15/09, o pagamento do dia 13 já aparece, mas não deveria.
-// ele só deve aparecer no proximo dia 13, que é 13/10 no caso, no próximo mes.
-
 public class TesteMain {
-    // instâncias das constas
+    // instâncias das contas
     static ContaCorrente contaC = new ContaCorrente();
     static ContaPoupanca contaP = new ContaPoupanca();
 
@@ -248,7 +242,7 @@ public class TesteMain {
 
             // Rendimento da poupança
             if (diaAtual >= diaInicio && novoMes) {
-                rendimentoSaldo = contaP.getSaldo() + (contaP.getSaldo() * 0.3);
+                rendimentoSaldo = contaP.getSaldo() * 1.03;
                 contaP.setSaldo(rendimentoSaldo);
                 novoMes = false;
             }
@@ -340,7 +334,7 @@ public class TesteMain {
                             System.out.println("É conta-salário? (1- Sim, 2- Não)");
                             ehSalario = scan.nextInt();
 
-                            if (ehSalario == 1){
+                            if (ehSalario == 1) {
                                 // salario
                                 do {
                                     System.out.println("Informe o salário:");

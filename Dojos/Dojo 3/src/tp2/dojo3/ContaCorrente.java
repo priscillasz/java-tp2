@@ -204,8 +204,7 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
             System.out.println("Saque realizado com sucesso. Valor em conta: "+getSaldo());
             return true;
         }
-        else if (valor > saldo){
-            // double saldoRetirar = valor - (valor - saldo);
+        else if (valor > saldo) {
             double sobra = valor - saldo;
             if (chequeEspecial >= sobra){
                 chequeEspecial -= sobra;
@@ -321,9 +320,10 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
             long diasAtrasados = TimeUnit.MILLISECONDS.toDays(diff);
 
             // cálculo do novo valor do boleto
-            boleto = valorBoleto + (valorBoleto * (0.1 * diasAtrasados));
+            boleto = valorBoleto * (1 + (0.01 * diasAtrasados));
 
-            multaBoleto = valorBoleto * (0.1 * diasAtrasados);
+            // 1 + (0.01 * diasAtrasados)
+            multaBoleto = boleto * (0.01 * diasAtrasados);
 
             if (valorBoleto > saldo) {
                 System.out.println("Não há saldo suficiente em conta.");

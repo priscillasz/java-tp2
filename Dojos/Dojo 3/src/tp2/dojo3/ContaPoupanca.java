@@ -13,6 +13,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta {
     private int diaPagamento;
     //
     private String pix;
+    private double boleto;
 
     //
     private double valor;
@@ -181,6 +182,8 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta {
 
     public double getMultaBoleto() { return multaBoleto; }
 
+    public double getBoleto() { return boleto; }
+
     // CONFIGURAÇÃO DO PIX
     public void setPix(String pix) {
         this.pix = pix;
@@ -205,8 +208,13 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta {
 
     @Override // DEPOSITAR
     public void depositar(double valor) {
-        saldo += valor;
-        System.out.println("Depósito realizado com sucesso. Valor em conta: "+saldo);
+        if (valor > 0) {
+            saldo += valor;
+            System.out.println("Depósito realizado com sucesso. Valor em conta: "+saldo);
+        }
+        else {
+            System.out.println("Valor menor ou igual a zero.");
+        }
     }
 
     // TRANSFERÊNCIA PARA CONTA EXTERNA
@@ -298,9 +306,9 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta {
             long diasAtrasados = TimeUnit.MILLISECONDS.toDays(diff);
 
             // cálculo do novo valor do boleto
-            valorBoleto = valorBoleto + (valorBoleto * (0.1 * diasAtrasados));
+            boleto = valorBoleto * (1 + (0.01 * diasAtrasados));
 
-            multaBoleto = valorBoleto * (0.1 * diasAtrasados);
+            multaBoleto = boleto * (0.01 * diasAtrasados);
 
             if (valorBoleto > saldo) {
                 System.out.println("Não há saldo suficiente em conta.");
@@ -308,7 +316,7 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta {
             }
             else {
                 saldo = saldo - valorBoleto;
-                System.out.println("Atraso de "+diasAtrasados+" dias no pagamento. Valor do boleto com ajuste de multa: "+ valorBoleto);
+                System.out.println("Atraso de "+diasAtrasados+" dias no pagamento. Valor do boleto com ajuste de multa: "+ boleto);
                 System.out.println("Pagamento de boleto realizado com sucesso.");
                 return true;
             }
