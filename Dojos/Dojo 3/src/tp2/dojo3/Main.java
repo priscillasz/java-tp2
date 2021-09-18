@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
-public class TesteMain {
+public class Main {
     // instâncias das contas
     static ContaCorrente contaC = new ContaCorrente();
     static ContaPoupanca contaP = new ContaPoupanca();
@@ -87,7 +87,6 @@ public class TesteMain {
         int anoInicio = inicio.getYear();
 
         int mesPrint = 0;
-        boolean proxMes = false;
 
         int diaAtual = 0, mesAtual = 0, anoAtual = 0;
 
@@ -127,9 +126,6 @@ public class TesteMain {
                             else {
                                 meses = 12 - mesInicio + mesAtual;
                             }
-                            System.out.println("Atual: "+mesAtual); // apagar dps
-                            System.out.println("Inicio: "+mesInicio); // apagar dps
-                            System.out.println("Meses: "+meses); // apagar dps
                             testeMeses = true;
                         }
                         mesInicio = mesAtual;
@@ -149,11 +145,9 @@ public class TesteMain {
             // adicionar salário
             if (contaC.getDiaPagamento() <= novaData.getDayOfMonth() && correnteSalario) {
                 if (salarioRecebido && !testeMeses) {
-                    System.out.println("nada"); // apagar isso dps
                 }
                 else if (!salarioRecebido && !testeMeses) {
                     contaC.addSalario(contaC.getSalario());
-                    System.out.println("to aqui"); // apagar isso dps
                     salarioRecebido = true;
 
                     // adicionar o salário no extrato
@@ -165,7 +159,6 @@ public class TesteMain {
                 }
                 else if (!salarioRecebido && testeMeses) {
                     double novoSalario = meses * contaC.getSalario();
-                    System.out.println("novo salario: "+novoSalario+" Meses: "+meses); // apagar isso dps
                     contaC.addSalario(novoSalario);
                     salarioRecebido = true;
                     testeMeses = false;
@@ -196,11 +189,10 @@ public class TesteMain {
             }
             else if (contaP.getDiaPagamento() <= novaData.getDayOfMonth() && poupancaSalario) {
                 if (salarioRecebido && !testeMeses) {
-                    System.out.println("nada"); // apagar isso dps
+                    // acho q é redudante isso aqui né, mas deixa aqui só pra não esquecer
                 }
                 else if (!salarioRecebido && !testeMeses) {
                     contaP.addSalario(contaP.getSalario());
-                    System.out.println("to aqui"); // apagar isso dps
                     salarioRecebido = true;
 
                     diaSalario = LocalDate.of(anoAtual, mesAtual, contaP.getDiaPagamento());
@@ -211,7 +203,6 @@ public class TesteMain {
                 }
                 else if (!salarioRecebido && testeMeses) {
                     double novoSalario = meses * contaP.getSalario();
-                    System.out.println("novo salario: "+novoSalario+" Meses: "+meses); // apagar dps
                     contaP.addSalario(novoSalario);
                     salarioRecebido = true;
                     testeMeses = false;
@@ -754,7 +745,7 @@ public class TesteMain {
                                 }
                             }
                         }
-                        else if (tipoTransferencia == 2) { // por pix FALTA ISSO AQUI
+                        else if (tipoTransferencia == 2) { // por pix
                             System.out.println("Informe o Pix da conta: ");
                             scan.nextLine();
                             String inputPix = scan.nextLine();
@@ -844,8 +835,8 @@ public class TesteMain {
                     }
 
                     // Dados do boleto
-                    System.out.println("Pagamento de boleto:");
-                    scan.nextLine();
+                    System.out.println("Pagamento de boleto");
+                    scan.nextLine(); // buffer
                     System.out.println("Código de barras (48 dígitos):");
                     String codigoBarras = scan.nextLine();
 

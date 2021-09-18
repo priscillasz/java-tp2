@@ -271,12 +271,14 @@ public class ContaPoupanca extends Conta implements TransacaoEmConta {
         }
         else if (opcao == 4){
             setPix("2923ty26-32x3-3d41-1x15-565jt45fc2e1");
+            // inserimos um exemplo no formato real da chave ao invés de gerar uma aleatoriamente
+            // essa chave é diferente da chave da conta Corrente
         }
         else {
             System.out.println("Opção inválida.");
         }
 
-        System.out.println("Pix configurado com ssucesso.");
+        System.out.println("Pix configurado com sucesso.");
         System.out.println("Seu pix: "+getPix());
     }
 

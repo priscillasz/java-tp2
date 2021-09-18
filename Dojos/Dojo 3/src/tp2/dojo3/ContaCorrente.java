@@ -285,12 +285,14 @@ public class ContaCorrente extends Conta implements TransacaoEmConta {
         }
         else if (opcao == 4) { // chave aleatoria
             setPix("f29a8230-4e74-4ef8-86e5-a3e9ba74ac3d");
+            // inserimos um exemplo no formato real da chave ao invés de gerar uma aleatoriamente
+            // essa chave é diferente da chave da conta Poupança
         }
         else {
             System.out.println("Opção inválida.");
         }
 
-        System.out.println("Pix configurado com ssucesso.");
+        System.out.println("Pix configurado com sucesso.");
         System.out.println("Seu pix: "+getPix());
     }
 
