@@ -2,7 +2,7 @@ package coffeemachine;
 
 import java.util.Scanner;
 
-public class CoffeeStg5 {
+public class CoffeeStg6 {
     // coffee ingredients + money + cups
     static int money = 550;
     static int water = 400;
@@ -12,7 +12,7 @@ public class CoffeeStg5 {
 
     // to check if program can stop running
     static boolean exit = false;
-    
+
     // buy something from the menu
     public static void buy() {
         Scanner scanner = new Scanner(System.in);
