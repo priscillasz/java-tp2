@@ -12,7 +12,7 @@ public class CoffeeStg5 {
 
     // to check if program can stop running
     static boolean exit = false;
-    
+
     // buy something from the menu
     public static void buy() {
         Scanner scanner = new Scanner(System.in);
